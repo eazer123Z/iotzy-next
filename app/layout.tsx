@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "IoTzy — Smart Home Dashboard",
   description: "Monitor & kontrol perangkat IoT Anda secara real-time",
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
   themeColor: "#080912",
 };
 
