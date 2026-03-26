@@ -61,31 +61,37 @@ export async function createSession(userId: number): Promise<string> {
 }
 
 export async function getSession(): Promise<SessionUser | null> {
-  const token = cookies().get("iotzy_session")?.value;
-  if (!token) return null;
+  try {
+    const token = cookies().get("iotzy_session")?.value;
+    if (!token) return null;
 
-  const session = await prisma.session.findUnique({
-    where: { sessionToken: token, expiresAt: { gt: new Date() } },
-    include: {
-      user: {
-        include: { settings: { select: { theme: true } } },
+    const session = await prisma.session.findUnique({
+      where: { sessionToken: token, expiresAt: { gt: new Date() } },
+      include: {
+        user: {
+          include: { settings: { select: { theme: true } } },
+        },
       },
-    },
-  });
+    });
 
-  if (!session) {
-    cookies().delete("iotzy_session");
+    if (!session) {
+      cookies().delete("iotzy_session");
+      return null;
+    }
+
+    return {
+      id: session.user.id,
+      username: session.user.username,
+      email: session.user.email,
+      fullName: session.user.fullName,
+      role: session.user.role,
+      theme: session.user.settings?.theme || "dark",
+    };
+  } catch (err) {
+    console.error("getSession error:", err);
+    // DB unreachable — don't redirect, let caller handle gracefully
     return null;
   }
-
-  return {
-    id: session.user.id,
-    username: session.user.username,
-    email: session.user.email,
-    fullName: session.user.fullName,
-    role: session.user.role,
-    theme: session.user.settings?.theme || "dark",
-  };
 }
 
 export async function destroySession(): Promise<void> {
