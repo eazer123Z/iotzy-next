@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAppStore } from "@/lib/store";
 import type { Device } from "@/types";
 
@@ -40,34 +40,32 @@ export default function DevicesContent({
     d.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  async function toggleDevice(id: string) {
-    const currentState = deviceStates[id];
-    const newState = !currentState;
-    setDeviceState(id, newState);
-
-    await fetch("/api/devices/state", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: Number(id), state: newState }),
-    });
-  }
+  const toggleDevice = useCallback(
+    async (id: string) => {
+      const current = deviceStates[id] ?? false;
+      setDeviceState(id, !current);
+      await fetch("/api/devices/state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: Number(id), state: !current }),
+      });
+    },
+    [deviceStates, setDeviceState]
+  );
 
   async function handleAdd() {
     if (!form.name.trim()) return;
     const method = editId ? "PUT" : "POST";
     const body = editId ? { id: Number(editId), ...form } : form;
-
     const res = await fetch("/api/devices", {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-
     if (res.ok) {
       setShowAdd(false);
       setEditId(null);
       setForm({ name: "", icon: "fa-plug", topic_sub: "", topic_pub: "" });
-      // Refresh
       const data = await fetch("/api/devices").then((r) => r.json());
       setDevices(data);
     }
@@ -80,118 +78,123 @@ export default function DevicesContent({
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 animate-fadeIn max-w-[1400px] mx-auto">
+      {/* Header */}
+      <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-heading">Perangkat</h1>
+          <h3 className="text-xl font-extrabold flex items-center gap-2">
+            <i className="fas fa-microchip text-accent"></i> Monitoring Perangkat
+          </h3>
           <p className="text-sm text-txt-secondary mt-1">
-            Kelola semua perangkat IoT Anda.
+            Kontrol & status perangkat real-time rumah pintar Anda.
           </p>
         </div>
-        <button
-          onClick={() => {
-            setShowAdd(true);
-            setEditId(null);
-            setForm({ name: "", icon: "fa-plug", topic_sub: "", topic_pub: "" });
-          }}
-          className="px-4 py-2 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent/80 transition"
-        >
-          <i className="fas fa-plus mr-2"></i>Tambah
-        </button>
-      </div>
-
-      {/* Search */}
-      <div className="relative">
-        <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-txt-muted text-sm"></i>
-        <input
-          type="text"
-          placeholder="Cari perangkat..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border text-sm focus:outline-none focus:border-accent transition"
-        />
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative">
+            <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-txt-muted text-sm"></i>
+            <input
+              type="text"
+              placeholder="Cari perangkat..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-border text-sm focus:outline-none focus:border-accent transition w-48"
+            />
+          </div>
+          <button
+            onClick={() => {
+              setShowAdd(true);
+              setEditId(null);
+              setForm({ name: "", icon: "fa-plug", topic_sub: "", topic_pub: "" });
+            }}
+            className="btn-primary"
+          >
+            <i className="fas fa-plus"></i> Tambah Perangkat
+          </button>
+        </div>
       </div>
 
       {/* Grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-16 text-txt-muted">
-          <i className="fas fa-microchip text-4xl opacity-20 mb-3 block"></i>
-          <p className="text-sm">
-            {search ? "Tidak ada perangkat ditemukan" : "Belum ada perangkat"}
+          <i className="fas fa-plug text-4xl opacity-20 mb-3 block"></i>
+          <p className="text-sm mb-4">
+            {search ? "Tidak ada perangkat ditemukan" : "Belum ada perangkat terhubung"}
           </p>
+          {!search && (
+            <button onClick={() => setShowAdd(true)} className="btn-primary">
+              <i className="fas fa-plus mr-2"></i>Tambah Perangkat
+            </button>
+          )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="device-card-grid">
           {filtered.map((dev) => {
-            const isOn = deviceStates[String(dev.id)] ?? Boolean(dev.lastState);
+            const id = String(dev.id);
+            const isOn = deviceStates[id] ?? Boolean(dev.lastState);
             return (
               <div
                 key={dev.id}
-                className="card p-5 group hover:border-accent/30 transition-all"
+                className={`device-card ${isOn ? "active" : ""}`}
+                style={isOn ? { "--card-accent": "var(--accent)" } as any : undefined}
+                onClick={() => toggleDevice(id)}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-all ${
-                      isOn
-                        ? "bg-accent/20 text-accent"
-                        : "bg-surface text-txt-muted"
-                    }`}
+                <div className="card-glow"></div>
+
+                {/* Edit/Delete buttons */}
+                <div className="absolute top-3 right-3 flex gap-1.5 z-20">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditId(id);
+                      setForm({
+                        name: dev.name,
+                        icon: dev.icon,
+                        topic_sub: dev.topicSub || "",
+                        topic_pub: dev.topicPub || "",
+                      });
+                      setShowAdd(true);
+                    }}
+                    className="w-7 h-7 rounded-lg bg-black/50 border border-white/10 text-txt-secondary text-xs flex items-center justify-center hover:bg-surface-hover hover:text-txt transition"
                   >
-                    <i className={`fas ${dev.icon}`}></i>
-                  </div>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                    <button
-                      onClick={() => {
-                        setEditId(String(dev.id));
-                        setForm({
-                          name: dev.name,
-                          icon: dev.icon,
-                          topic_sub: dev.topicSub || "",
-                          topic_pub: dev.topicPub || "",
-                        });
-                        setShowAdd(true);
-                      }}
-                      className="p-1.5 rounded-lg hover:bg-surface text-txt-muted"
-                    >
-                      <i className="fas fa-pen text-xs"></i>
-                    </button>
-                    <button
-                      onClick={() => handleDelete(String(dev.id))}
-                      className="p-1.5 rounded-lg hover:bg-danger/10 text-danger"
-                    >
-                      <i className="fas fa-trash text-xs"></i>
-                    </button>
-                  </div>
+                    <i className="fas fa-pen"></i>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(id);
+                    }}
+                    className="w-7 h-7 rounded-lg bg-black/50 border border-white/10 text-txt-secondary text-xs flex items-center justify-center hover:bg-danger-bg hover:text-danger transition"
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
                 </div>
-                <div className="mb-3">
-                  <div className="font-semibold text-sm">{dev.name}</div>
-                  <div className="text-[11px] text-txt-muted mt-0.5">
+
+                {/* Icon */}
+                <div className="device-icon-wrap">
+                  <i className={`fas ${dev.icon}`}></i>
+                </div>
+
+                {/* Info */}
+                <div className="text-center z-2">
+                  <div className="text-sm font-bold">{dev.name}</div>
+                  <div className="text-[10px] text-txt-muted font-mono">
                     {dev.topicSub || "No topic"}
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                      isOn
-                        ? "bg-success/10 text-success"
-                        : "bg-txt-muted/10 text-txt-muted"
-                    }`}
-                  >
-                    {isOn ? "ON" : "OFF"}
-                  </span>
-                  <button
-                    onClick={() => toggleDevice(String(dev.id))}
-                    className={`w-10 h-6 rounded-full transition-all ${
-                      isOn ? "bg-accent" : "bg-txt-muted/20"
-                    }`}
-                  >
-                    <div
-                      className={`w-4 h-4 rounded-full bg-white transition-transform ${
-                        isOn ? "translate-x-5" : "translate-x-1"
-                      }`}
-                    ></div>
-                  </button>
+
+                {/* Status Pill */}
+                <div className={`device-status-pill ${isOn ? "on" : ""}`}>
+                  {isOn ? "ON" : "OFF"}
                 </div>
+
+                {/* Toggle */}
+                <div
+                  className={`toggle-switch ${isOn ? "on" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDevice(id);
+                  }}
+                />
               </div>
             );
           })}
@@ -211,10 +214,10 @@ export default function DevicesContent({
                 placeholder="Nama perangkat"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm focus:outline-none focus:border-accent"
+                className="input-field"
               />
               <div>
-                <label className="text-xs text-txt-muted mb-1 block">Icon</label>
+                <label className="text-xs text-txt-muted mb-2 block">Icon</label>
                 <div className="flex flex-wrap gap-2">
                   {Object.values(DEVICE_ICONS).map((icon) => (
                     <button
@@ -223,7 +226,7 @@ export default function DevicesContent({
                       className={`w-9 h-9 rounded-lg flex items-center justify-center transition ${
                         form.icon === icon
                           ? "bg-accent/20 text-accent border border-accent"
-                          : "bg-surface border border-border text-txt-muted"
+                          : "bg-surface border border-border text-txt-muted hover:border-border-hover"
                       }`}
                     >
                       <i className={`fas ${icon}`}></i>
@@ -236,30 +239,24 @@ export default function DevicesContent({
                 placeholder="Topic Subscribe (MQTT)"
                 value={form.topic_sub}
                 onChange={(e) => setForm({ ...form, topic_sub: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm focus:outline-none focus:border-accent"
+                className="input-field"
               />
               <input
                 type="text"
                 placeholder="Topic Publish (MQTT)"
                 value={form.topic_pub}
                 onChange={(e) => setForm({ ...form, topic_pub: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm focus:outline-none focus:border-accent"
+                className="input-field"
               />
             </div>
             <div className="flex gap-3 mt-5">
               <button
-                onClick={() => {
-                  setShowAdd(false);
-                  setEditId(null);
-                }}
-                className="flex-1 py-2.5 rounded-xl border border-border text-sm font-medium hover:bg-surface transition"
+                onClick={() => { setShowAdd(false); setEditId(null); }}
+                className="btn-secondary flex-1 justify-center"
               >
                 Batal
               </button>
-              <button
-                onClick={handleAdd}
-                className="flex-1 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent/80 transition"
-              >
+              <button onClick={handleAdd} className="btn-primary flex-1 justify-center">
                 {editId ? "Simpan" : "Tambah"}
               </button>
             </div>
