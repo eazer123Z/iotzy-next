@@ -69,7 +69,17 @@ export async function POST(req: Request) {
     }
 
     // Forward to AI chat
-    const chatApiUrl = `${process.env.APP_URL || ""}/api/chat`;
+    const baseUrl =
+      process.env.APP_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+
+    if (!baseUrl) {
+      console.error("APP_URL or VERCEL_URL not set");
+      await sendTelegram(botToken!, chatId, "⚠️ Server configuration error");
+      return NextResponse.json({ ok: true });
+    }
+
+    const chatApiUrl = `${baseUrl}/api/chat`;
     const res = await fetch(chatApiUrl, {
       method: "POST",
       headers: {

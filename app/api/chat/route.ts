@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/db";
+
 import { getSession } from "@/lib/auth";
 
 const AI_MODEL = process.env.OPENROUTER_MODEL || "deepseek/deepseek-chat";
@@ -353,9 +356,23 @@ async function executeActions(userId: number, actions: any[]) {
 
 // ─── POST handler ───
 export async function POST(req: Request) {
-  const user = await getSession();
-  if (!user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // Support both session auth and telegram webhook auth
+  let userId: number;
+  const telegramHeader = req.headers.get("x-telegram-webhook");
+
+  if (telegramHeader === "true") {
+    const headerUserId = req.headers.get("x-user-id");
+    if (!headerUserId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    userId = Number(headerUserId);
+  } else {
+    const user = await getSession();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    userId = user.id;
+  }
 
   const body = await req.json();
   const message = (body.message || "").trim();
@@ -372,12 +389,12 @@ export async function POST(req: Request) {
   const platform = body.platform || "web";
 
   // Save user message
-  await saveMessage(user.id, "user", message, platform);
+  await saveMessage(userId, "user", message, platform);
 
   // Build context
-  const ctx = await collectContext(user.id);
+  const ctx = await collectContext(userId);
   const ctxText = formatContext(ctx);
-  const history = await getHistory(user.id);
+  const history = await getHistory(userId);
   const time = new Date().toISOString();
 
   const systemPrompt = `Kamu adalah IoTzy Assistant — AI personal cerdas untuk smart home.
@@ -421,7 +438,7 @@ UI_Action: navigate_dashboard | navigate_devices | navigate_sensors | navigate_a
 
   if (!result.ok) {
     const errMsg = "Koneksi AI sibuk, coba lagi ya! 🔄";
-    await saveMessage(user.id, "bot", errMsg, platform);
+    await saveMessage(userId, "bot", errMsg, platform);
     return NextResponse.json({ success: false, error: errMsg });
   }
 
@@ -443,7 +460,7 @@ UI_Action: navigate_dashboard | navigate_devices | navigate_sensors | navigate_a
 
   if (!parsed) {
     const errMsg = "Gagal memproses jawaban AI. Coba lagi ya 😊";
-    await saveMessage(user.id, "bot", errMsg, platform);
+    await saveMessage(userId, "bot", errMsg, platform);
     return NextResponse.json({ success: false, error: errMsg });
   }
 
@@ -454,10 +471,10 @@ UI_Action: navigate_dashboard | navigate_devices | navigate_sensors | navigate_a
   parsed.actions = parsed.actions || [];
 
   // Save bot response
-  await saveMessage(user.id, "bot", parsed.response_text, platform);
+  await saveMessage(userId, "bot", parsed.response_text, platform);
 
   // Execute actions
-  const execution = await executeActions(user.id, parsed.actions);
+  const execution = await executeActions(userId, parsed.actions);
 
   return NextResponse.json({
     success: true,

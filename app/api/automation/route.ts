@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/db";
+
 import { getSession } from "@/lib/auth";
 
 // GET automation rules + schedules
@@ -83,37 +86,42 @@ export async function PUT(req: Request) {
   const { type, id } = body;
 
   if (type === "rule") {
+    const data: Record<string, any> = {};
+
+    // Allow partial updates (e.g. toggle only)
+    if (body.sensor_id !== undefined) data.sensorId = body.sensor_id ? Number(body.sensor_id) : null;
+    if (body.device_id !== undefined) data.deviceId = Number(body.device_id);
+    if (body.condition_type !== undefined) data.conditionType = body.condition_type;
+    if (body.threshold !== undefined) data.threshold = body.threshold ?? null;
+    if (body.threshold_min !== undefined) data.thresholdMin = body.threshold_min ?? null;
+    if (body.threshold_max !== undefined) data.thresholdMax = body.threshold_max ?? null;
+    if (body.action !== undefined) data.action = body.action;
+    if (body.delay_ms !== undefined) data.delayMs = body.delay_ms ?? 0;
+    if (body.start_time !== undefined) data.startTime = body.start_time || null;
+    if (body.end_time !== undefined) data.endTime = body.end_time || null;
+    if (body.days !== undefined) data.days = body.days ? JSON.stringify(body.days) : undefined;
+    if (body.is_enabled !== undefined) data.isEnabled = body.is_enabled;
+
     await prisma.automationRule.updateMany({
       where: { id: Number(id), userId: user.id },
-      data: {
-        sensorId: body.sensor_id ? Number(body.sensor_id) : null,
-        deviceId: Number(body.device_id),
-        conditionType: body.condition_type,
-        threshold: body.threshold ?? null,
-        thresholdMin: body.threshold_min ?? null,
-        thresholdMax: body.threshold_max ?? null,
-        action: body.action,
-        delayMs: body.delay_ms ?? 0,
-        startTime: body.start_time || null,
-        endTime: body.end_time || null,
-        days: body.days ? JSON.stringify(body.days) : undefined,
-        isEnabled: body.is_enabled ?? true,
-      },
+      data,
     });
     return NextResponse.json({ success: true });
   }
 
   if (type === "schedule") {
+    const data: Record<string, any> = {};
+
+    if (body.label !== undefined) data.label = body.label;
+    if (body.time !== undefined) data.timeHhmm = body.time;
+    if (body.days !== undefined) data.days = body.days ? JSON.stringify(body.days) : undefined;
+    if (body.action !== undefined) data.action = body.action;
+    if (body.device_ids !== undefined) data.devices = body.device_ids ? JSON.stringify(body.device_ids) : undefined;
+    if (body.is_enabled !== undefined) data.isEnabled = body.is_enabled;
+
     await prisma.schedule.updateMany({
       where: { id: Number(id), userId: user.id },
-      data: {
-        label: body.label,
-        timeHhmm: body.time,
-        days: body.days ? JSON.stringify(body.days) : undefined,
-        action: body.action,
-        devices: body.device_ids ? JSON.stringify(body.device_ids) : undefined,
-        isEnabled: body.is_enabled ?? true,
-      },
+      data,
     });
     return NextResponse.json({ success: true });
   }

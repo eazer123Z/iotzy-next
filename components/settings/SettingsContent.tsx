@@ -271,7 +271,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                 </button>
               ))}
             </div>
-            <button onClick={() => save({ cv_min_confidence: cv.confidence, cv_dark_threshold: cv.dark, cv_bright_threshold: cv.bright })} disabled={saving} className="px-6 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent/80 transition disabled:opacity-50">
+            <button onClick={() => save({ cv_min_confidence: cv.confidence, cv_dark_threshold: cv.dark, cv_bright_threshold: cv.bright, cv_human_rules_enabled: cv.human, cv_light_rules_enabled: cv.light })} disabled={saving} className="px-6 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent/80 transition disabled:opacity-50">
               {saving ? "Menyimpan..." : "Simpan CV"}
             </button>
           </div>

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/db";
+
 import { getSession } from "@/lib/auth";
 
 export async function GET() {
@@ -58,9 +61,13 @@ export async function DELETE(req: Request) {
   const user = await getSession();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await req.json();
+  const { searchParams } = new URL(req.url);
+  const id = Number(searchParams.get("id"));
+
+  if (!id) return NextResponse.json({ error: "ID diperlukan" }, { status: 400 });
+
   await prisma.schedule.deleteMany({
-    where: { id: Number(body.id), userId: user.id },
+    where: { id, userId: user.id },
   });
 
   return NextResponse.json({ success: true });

@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/db";
+
 import { getSession } from "@/lib/auth";
 
 export async function GET() {
@@ -45,6 +48,8 @@ export async function POST(req: Request) {
     "cv_min_confidence",
     "cv_dark_threshold",
     "cv_bright_threshold",
+    "cv_human_rules_enabled",
+    "cv_light_rules_enabled",
   ];
 
   const fieldMap: Record<string, string> = {
@@ -68,6 +73,8 @@ export async function POST(req: Request) {
     cv_min_confidence: "cvMinConfidence",
     cv_dark_threshold: "cvDarkThreshold",
     cv_bright_threshold: "cvBrightThreshold",
+    cv_human_rules_enabled: "cvHumanRulesEnabled",
+    cv_light_rules_enabled: "cvLightRulesEnabled",
   };
 
   const updateData: Record<string, any> = {};
