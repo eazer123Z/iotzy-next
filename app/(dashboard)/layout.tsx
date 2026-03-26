@@ -13,13 +13,25 @@ export default async function DashboardLayout({
 
   const settings = await prisma.userSettings.findUnique({
     where: { userId: user.id },
-    select: { mqttBroker: true },
+    select: {
+      mqttBroker: true,
+      mqttPort: true,
+      mqttUseSsl: true,
+      mqttUsername: true,
+      mqttPath: true,
+    },
   });
 
   return (
     <DashboardLayoutClient
       user={user}
-      settings={{ mqttBroker: settings?.mqttBroker }}
+      settings={{
+        mqttBroker: settings?.mqttBroker,
+        mqttPort: settings?.mqttPort,
+        mqttUseSsl: settings?.mqttUseSsl,
+        mqttUsername: settings?.mqttUsername,
+        mqttPath: settings?.mqttPath,
+      }}
     >
       {children}
     </DashboardLayoutClient>
