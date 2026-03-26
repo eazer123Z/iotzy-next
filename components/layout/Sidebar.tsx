@@ -43,7 +43,7 @@ export default function Sidebar({ user, settings }: SidebarProps) {
   const sensorCount = Object.keys(sensors).length;
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-sidebar bg-bg-2 border-r border-border z-40 flex flex-col">
+    <aside className="h-full w-sidebar bg-bg-2 border-r border-border flex flex-col overflow-y-auto">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-border">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white text-lg">

@@ -9,7 +9,7 @@ const navItems = [
   { href: "/devices", icon: "fa-microchip", label: "Device" },
   { href: "/sensors", icon: "fa-signal", label: "Sensor" },
   { href: "/automation", icon: "fa-robot", label: "Auto" },
-  { href: "/settings", icon: "fa-gear", label: "Setting" },
+  { href: "/camera", icon: "fa-eye", label: "Camera" },
 ];
 
 export default function BottomNav() {

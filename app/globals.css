@@ -139,6 +139,114 @@ body {
   animation: spin 1s linear infinite;
 }
 
+/* ── Card Layout ── */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.card-title i {
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+.card-body {
+  padding: 20px;
+}
+
+/* ── Icon Button ── */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon-btn:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ── Sensor Name ── */
+.sensor-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+/* ── Default Bar (fallback) ── */
+.default-bar {
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+}
+.air-bar {
+  background: linear-gradient(90deg, #86efac, #22c55e, #15803d);
+}
+.brightness-bar {
+  background: linear-gradient(90deg, #fde68a, #f59e0b, #d97706);
+}
+.smoke-bar {
+  background: linear-gradient(90deg, #fca5a5, #ef4444, #b91c1c);
+}
+.gas-bar {
+  background: linear-gradient(90deg, #fcd34d, #f59e0b, #d97706);
+}
+
+/* ── Range Input Styling ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* ── Select Styling ── */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 36px;
+}
+select option {
+  background: var(--surface-solid);
+  color: var(--text);
+}
+
+/* ── Mobile Bottom Nav spacing ── */
+@media (max-width: 1023px) {
+  .chat-fab-mobile {
+    bottom: 72px;
+  }
+}
+
 /* ── Component Classes ── */
 @layer components {
   .btn-primary {

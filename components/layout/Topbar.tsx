@@ -66,7 +66,7 @@ export default function Topbar({
   }, []);
 
   return (
-    <header className="fixed top-0 left-sidebar right-0 h-topbar bg-bg/80 backdrop-blur-xl border-b border-border z-30 flex items-center justify-between px-5">
+    <header className="fixed top-0 right-0 h-topbar bg-bg/80 backdrop-blur-xl border-b border-border z-30 flex items-center justify-between px-5 lg:left-sidebar left-0">
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}

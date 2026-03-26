@@ -56,17 +56,24 @@ export default function DashboardLayoutClient({
     setMqttConnected(mqttConnected);
   }, [mqttConnected, setMqttConnected]);
 
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [typeof window !== "undefined" ? window.location.pathname : ""]);
+
   return (
     <div className={user.theme === "light" ? "" : "dark"}>
-      <Sidebar user={user} settings={settings} />
-
-      {/* Mobile overlay */}
+      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
+
+      <div className={`fixed left-0 top-0 h-full z-40 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+        <Sidebar user={user} settings={settings} />
+      </div>
 
       <Topbar
         username={user.username}
