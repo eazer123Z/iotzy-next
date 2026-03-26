@@ -226,3 +226,249 @@ body {
     @apply badge bg-info-bg text-info;
   }
 }
+
+/* ── Loading Screen ── */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.loading-screen.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loading-logo {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+  animation: pulse 1.5s infinite;
+}
+.loading-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--heading);
+  margin-bottom: 16px;
+}
+.loading-bar {
+  width: 200px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 12px;
+  overflow: hidden;
+}
+.loading-fill {
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 2px;
+  animation: loadSlide 1.2s ease infinite;
+}
+@keyframes loadSlide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+/* ── Device Cards (PHP style) ── */
+.device-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+.device-card {
+  position: relative;
+  background: rgba(18, 18, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+.device-card:hover {
+  background: rgba(28, 28, 48, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+.device-card.active {
+  background: rgba(28, 28, 48, 0.7);
+  border-color: var(--accent);
+}
+.device-card .card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, var(--accent) 0%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+}
+.device-card.active .card-glow {
+  opacity: 0.12;
+}
+.device-icon-wrap {
+  position: relative;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  transition: all 0.4s ease;
+}
+.device-card.active .device-icon-wrap {
+  background: var(--accent-bg);
+  color: var(--accent-light);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.device-status-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  z-index: 2;
+}
+.device-status-pill.on {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+/* ── Toggle Switch (PHP style) ── */
+.toggle-switch {
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.toggle-switch.on {
+  background: var(--success);
+}
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.toggle-switch.on::after {
+  left: 24px;
+}
+
+/* ── Sensor Cards (PHP style) ── */
+.sensor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.sensor-card:hover {
+  border-color: var(--border-hover);
+}
+.sensor-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--accent-glow), transparent 60%);
+  opacity: 0;
+  transition: var(--transition);
+  pointer-events: none;
+}
+.sensor-card:hover::before {
+  opacity: 1;
+}
+.sensor-big-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.sensor-value-big {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--heading);
+  line-height: 1;
+  font-family: var(--font-mono);
+}
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.temp-bar {
+  background: linear-gradient(90deg, #3b82f6, #22c55e, #f59e0b, #ef4444);
+}
+.humidity-bar {
+  background: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+}
+.sparkline-canvas {
+  width: 100%;
+  height: 44px;
+  display: block;
+}
+
+/* ── Chart Bars (Dashboard) ── */
+.chart-mock {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 80px;
+}
+.chart-mock .bar {
+  width: 24px;
+  background: linear-gradient(to top, var(--accent), var(--accent-light));
+  border-radius: 4px 4px 0 0;
+  opacity: 0.5;
+  animation: barGrow 0.8s ease;
+}
+@keyframes barGrow {
+  from { height: 0 !important; }
+}

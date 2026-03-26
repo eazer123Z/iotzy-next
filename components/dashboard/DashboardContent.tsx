@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAppStore } from "@/lib/store";
 import type { Device, Sensor, CvState, ActivityLog } from "@/types";
 
@@ -28,10 +28,20 @@ export default function DashboardContent({
   stats,
   quickControls,
 }: DashboardContentProps) {
-  const { setDevices, setSensors, setCv, setLogs, setQuickControls } =
-    useAppStore();
+  const {
+    setDevices,
+    setSensors,
+    setCv,
+    setLogs,
+    setQuickControls,
+    deviceStates,
+    setDeviceState,
+    cv: liveCv,
+    mqttConnected,
+  } = useAppStore();
+  const [clock, setClock] = useState("--:--:--");
 
-  // Hydrate store from server data
+  // Hydrate store
   useEffect(() => {
     setDevices(initialDevices);
     setSensors(initialSensors);
@@ -40,9 +50,52 @@ export default function DashboardContent({
     setQuickControls(quickControls);
   }, []);
 
+  // Real-time clock
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      setClock(
+        now.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+    };
+    tick();
+    const i = setInterval(tick, 1000);
+    return () => clearInterval(i);
+  }, []);
+
+  // Quick control toggle
+  const toggleDevice = useCallback(
+    async (id: string) => {
+      const current = deviceStates[id] ?? false;
+      setDeviceState(id, !current);
+      await fetch("/api/devices/state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: Number(id), state: !current }),
+      });
+    },
+    [deviceStates, setDeviceState]
+  );
+
+  const activeDevices = Object.values(deviceStates).filter(Boolean).length;
+  const personCount = liveCv.personCount ?? cvState?.personCount ?? 0;
+  const lightCond = liveCv.lightCondition || cvState?.lightCondition || "unknown";
+  const brightnessVal = liveCv.brightness ?? cvState?.brightness ?? 0;
+
+  const condMap: Record<string, { label: string; color: string }> = {
+    dark: { label: "Gelap", color: "text-blue-400" },
+    normal: { label: "Normal", color: "text-green-400" },
+    bright: { label: "Terang", color: "text-yellow-400" },
+  };
+  const cond = condMap[lightCond] || { label: lightCond, color: "text-txt-muted" };
+
   return (
-    <div className="space-y-6 animate-fadeIn">
-      {/* Welcome Header */}
+    <div className="space-y-6 animate-fadeIn max-w-[1400px] mx-auto">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold text-heading">
@@ -51,6 +104,17 @@ export default function DashboardContent({
           <p className="text-sm text-txt-secondary mt-1">
             Ringkasan kondisi rumah pintar Anda saat ini.
           </p>
+        </div>
+        <div className="text-right">
+          <div className="font-mono text-lg font-bold text-heading">{clock}</div>
+          <div className="text-[10px] text-txt-muted">
+            {new Date().toLocaleDateString("id-ID", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
         </div>
       </div>
 
@@ -61,13 +125,13 @@ export default function DashboardContent({
           color="text-success"
           bgColor="bg-success/10"
           label="Perangkat Aktif"
-          value={stats.activeDevices}
+          value={activeDevices}
           sub={`dari ${stats.totalDevices} perangkat`}
         />
         <StatCard
           icon="fa-gauge-high"
-          color="text-accent"
-          bgColor="bg-accent/10"
+          color="text-info"
+          bgColor="bg-info/10"
           label="Sensor Aktif"
           value={stats.onlineSensors}
           sub={`dari ${stats.totalSensors} sensor`}
@@ -82,154 +146,196 @@ export default function DashboardContent({
         />
         <StatCard
           icon="fa-cloud"
-          color="text-purple-400"
-          bgColor="bg-purple-500/10"
+          color="text-accent-light"
+          bgColor="bg-accent/10"
           label="Koneksi Cloud"
-          value="—"
-          sub="Siap terhubung"
+          value={mqttConnected ? "Online" : "Offline"}
+          sub="MQTT"
         />
       </div>
 
-      {/* Main Content Grid */}
+      {/* Main Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Chart + Activity */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Chart Placeholder */}
-          <div className="card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fas fa-chart-line text-accent text-sm"></i>
-              <span className="font-semibold text-sm">Monitoring Sensor</span>
+          {/* Chart Card */}
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">
+                <i className="fas fa-chart-line"></i> Monitoring Sensor
+              </span>
+              <select className="px-3 py-1.5 rounded-lg bg-surface border border-border text-xs">
+                <option>Semua Sensor</option>
+                {initialSensors.map((s) => (
+                  <option key={s.id}>{s.name}</option>
+                ))}
+              </select>
             </div>
-            <div className="h-[200px] flex items-center justify-center text-txt-muted text-sm">
-              <div className="text-center">
-                <i className="fas fa-chart-area text-3xl opacity-20 mb-2 block"></i>
-                Grafik akan muncul saat sensor mengirim data
+            <div className="card-body">
+              <div className="h-[200px] flex items-end justify-center gap-2 px-4">
+                {[40, 60, 35, 80, 55, 70, 45, 65, 50, 75, 30, 85].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-t-md bg-gradient-to-t from-accent/40 to-accent-light/60 transition-all duration-500"
+                    style={{ height: `${h}%` }}
+                  />
+                ))}
               </div>
+              <p className="text-center text-txt-muted text-xs mt-3">
+                Grafik sedang disiapkan...
+              </p>
             </div>
           </div>
 
           {/* Activity Feed */}
-          <div className="card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fas fa-clock-rotate-left text-accent text-sm"></i>
-              <span className="font-semibold text-sm">Aktivitas Terbaru</span>
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">
+                <i className="fas fa-clock-rotate-left"></i> Aktivitas Terbaru
+              </span>
             </div>
-            {initialLogs.length === 0 ? (
-              <p className="text-txt-muted text-sm text-center py-4">
-                Belum ada aktivitas tercatat.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {initialLogs.map((log) => (
-                  <div
-                    key={log.id}
-                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface/50 transition-colors"
-                  >
+            <div className="card-body">
+              {initialLogs.length === 0 ? (
+                <p className="text-txt-muted text-sm text-center py-4">
+                  Belum ada aktivitas tercatat.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {initialLogs.map((log) => (
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs ${
-                        log.logType === "success"
-                          ? "bg-success/10 text-success"
-                          : log.logType === "warning"
-                          ? "bg-warning/10 text-warning"
-                          : "bg-accent/10 text-accent"
-                      }`}
+                      key={log.id}
+                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface/50 transition-colors"
                     >
-                      <i
-                        className={`fas ${
-                          log.triggerType === "Manual"
-                            ? "fa-hand-pointer"
-                            : log.triggerType === "Automation"
-                            ? "fa-robot"
-                            : "fa-microchip"
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs ${
+                          log.logType === "success"
+                            ? "bg-success/10 text-success"
+                            : log.logType === "warning"
+                            ? "bg-warning/10 text-warning"
+                            : "bg-accent/10 text-accent"
                         }`}
-                      ></i>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">
-                        {log.deviceName} — {log.activity}
+                      >
+                        <i
+                          className={`fas ${
+                            log.triggerType === "Manual"
+                              ? "fa-hand-pointer"
+                              : log.triggerType === "Automation"
+                              ? "fa-robot"
+                              : "fa-microchip"
+                          }`}
+                        ></i>
                       </div>
-                      <div className="text-[11px] text-txt-muted">
-                        {new Date(log.createdAt).toLocaleTimeString("id-ID")} •{" "}
-                        {log.triggerType}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">
+                          {log.deviceName} — {log.activity}
+                        </div>
+                        <div className="text-[11px] text-txt-muted">
+                          {new Date(log.createdAt).toLocaleTimeString("id-ID")} •{" "}
+                          {log.triggerType}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right: Quick Controls + CV + Room Summary */}
+        {/* Right: Quick Controls + CV + Room */}
         <div className="space-y-4">
           {/* Quick Controls */}
-          <div className="card p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <i className="fas fa-bolt text-warning text-sm"></i>
-                <span className="font-semibold text-sm">Kontrol Cepat</span>
-              </div>
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">
+                <i className="fas fa-bolt"></i> Kontrol Cepat
+              </span>
+              <button className="icon-btn" title="Pilih perangkat">
+                <i className="fas fa-gear text-xs"></i>
+              </button>
             </div>
-            {quickControls.length === 0 ? (
-              <p className="text-txt-muted text-xs text-center py-4">
-                Belum ada perangkat favorit.
-              </p>
-            ) : (
-              <div className="grid grid-cols-2 gap-3">
-                {quickControls.map((id) => {
-                  const dev = initialDevices.find(
-                    (d) => String(d.id) === id
-                  );
-                  if (!dev) return null;
-                  return (
-                    <div
-                      key={id}
-                      className="p-3 rounded-xl bg-surface border border-border text-center"
-                    >
-                      <i
-                        className={`fas ${dev.icon} text-lg text-txt-secondary`}
-                      ></i>
-                      <div className="text-xs font-medium mt-1 truncate">
-                        {dev.name}
-                      </div>
-                      <div className="text-[10px] text-txt-muted mt-0.5">
-                        {dev.lastState ? "ON" : "OFF"}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <div className="card-body">
+              {quickControls.length === 0 ? (
+                <p className="text-txt-muted text-xs text-center py-4">
+                  Belum ada perangkat favorit.
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  {quickControls.map((id) => {
+                    const dev = initialDevices.find(
+                      (d) => String(d.id) === id
+                    );
+                    if (!dev) return null;
+                    const isOn =
+                      deviceStates[id] ?? Boolean(dev.lastState);
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => toggleDevice(id)}
+                        className={`p-3 rounded-xl border text-center transition-all ${
+                          isOn
+                            ? "bg-accent/10 border-accent/30"
+                            : "bg-surface border-border"
+                        }`}
+                      >
+                        <i
+                          className={`fas ${dev.icon} text-lg ${
+                            isOn ? "text-accent" : "text-txt-muted"
+                          }`}
+                        ></i>
+                        <div className="text-xs font-medium mt-1 truncate">
+                          {dev.name}
+                        </div>
+                        <div
+                          className={`text-[10px] mt-0.5 font-bold ${
+                            isOn ? "text-success" : "text-txt-muted"
+                          }`}
+                        >
+                          {isOn ? "ON" : "OFF"}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* CV Preview */}
-          <div className="card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fas fa-eye text-accent text-sm"></i>
-              <span className="font-semibold text-sm">Computer Vision</span>
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">
+                <i className="fas fa-eye"></i> Computer Vision
+              </span>
+              <a href="/camera" className="text-xs text-accent hover:underline">
+                Detail <i className="fas fa-arrow-right text-[10px]"></i>
+              </a>
             </div>
-            <div className="h-[120px] rounded-xl bg-surface border border-border flex items-center justify-center text-txt-muted text-xs">
-              <div className="text-center">
-                <i className="fas fa-video-slash text-xl opacity-30 mb-1 block"></i>
-                Preview kamera nonaktif
+            <div className="card-body">
+              <div className="aspect-video rounded-xl bg-surface border border-border flex items-center justify-center text-txt-muted text-xs">
+                <div className="text-center">
+                  <i className="fas fa-video-slash text-2xl opacity-30 mb-1 block"></i>
+                  Preview kamera nonaktif
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Room Summary */}
-          <div className="card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fas fa-shield-halved text-success text-sm"></i>
-              <span className="font-semibold text-sm">Kondisi Ruangan</span>
+          {/* Room Condition */}
+          <div className="card">
+            <div className="card-header">
+              <span className="card-title">
+                <i className="fas fa-shield-halved"></i> Kondisi Ruangan
+              </span>
             </div>
-            <div className="space-y-3">
+            <div className="card-body space-y-3">
               <SummaryItem
                 icon="fa-users"
                 color="text-accent"
                 label="Kehadiran Orang"
                 value={
-                  cvState && cvState.personCount > 0
-                    ? `Terdeteksi (${cvState.personCount})`
+                  personCount > 0
+                    ? `Terdeteksi (${personCount})`
                     : "Tidak Terdeteksi"
                 }
               />
@@ -237,17 +343,7 @@ export default function DashboardContent({
                 icon="fa-lightbulb"
                 color="text-warning"
                 label="Kondisi Cahaya"
-                value={
-                  cvState
-                    ? `${
-                        cvState.lightCondition === "dark"
-                          ? "Gelap"
-                          : cvState.lightCondition === "bright"
-                          ? "Terang"
-                          : "Normal"
-                      } (${cvState.brightness}%)`
-                    : "Memindai..."
-                }
+                value={`${cond.label} (${brightnessVal}%)`}
               />
             </div>
           </div>
@@ -257,7 +353,7 @@ export default function DashboardContent({
   );
 }
 
-// ─── Helper Components ───
+// ─── Helpers ───
 
 function StatCard({
   icon,
@@ -275,15 +371,15 @@ function StatCard({
   sub: string;
 }) {
   return (
-    <div className="card p-4 flex items-center gap-4">
+    <div className="card p-4 flex items-center gap-4 hover:border-border-hover hover:-translate-y-0.5 transition-all">
       <div
-        className={`w-10 h-10 rounded-xl ${bgColor} ${color} flex items-center justify-center text-lg`}
+        className={`w-11 h-11 rounded-xl ${bgColor} ${color} flex items-center justify-center text-lg`}
       >
         <i className={`fas ${icon}`}></i>
       </div>
       <div>
-        <div className="text-xl font-bold">{value}</div>
-        <div className="text-[11px] font-medium text-txt-muted">{label}</div>
+        <div className="text-xl font-extrabold text-heading">{value}</div>
+        <div className="text-[11px] font-medium text-txt-secondary">{label}</div>
         <div className="text-[10px] text-txt-muted">{sub}</div>
       </div>
     </div>
@@ -306,7 +402,7 @@ function SummaryItem({
       <i className={`fas ${icon} ${color} text-sm w-5 text-center`}></i>
       <div>
         <div className="text-[10px] text-txt-muted">{label}</div>
-        <div className="text-sm font-semibold">{value}</div>
+        <div className="text-sm font-semibold text-heading">{value}</div>
       </div>
     </div>
   );
