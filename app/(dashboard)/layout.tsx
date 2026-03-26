@@ -1,0 +1,27 @@
+import { getSession } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { redirect } from "next/navigation";
+import DashboardLayoutClient from "@/components/layout/DashboardLayoutClient";
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getSession();
+  if (!user) redirect("/login");
+
+  const settings = await prisma.userSettings.findUnique({
+    where: { userId: user.id },
+    select: { mqttBroker: true },
+  });
+
+  return (
+    <DashboardLayoutClient
+      user={user}
+      settings={{ mqttBroker: settings?.mqttBroker }}
+    >
+      {children}
+    </DashboardLayoutClient>
+  );
+}

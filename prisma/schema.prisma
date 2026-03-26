@@ -1,0 +1,258 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  username       String    @unique @db.VarChar(50)
+  email          String?   @db.VarChar(100)
+  passwordHash   String    @map("password_hash") @db.VarChar(255)
+  fullName       String?   @map("full_name") @db.VarChar(100)
+  role           String    @default("user") @db.VarChar(10)
+  isActive       Boolean   @default(true) @map("is_active")
+  lastLogin      DateTime? @map("last_login")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  sessions           Session[]
+  devices            Device[]
+  deviceSessions     DeviceSession[]
+  sensors            Sensor[]
+  automationRules    AutomationRule[]
+  schedules          Schedule[]
+  activityLogs       ActivityLog[]
+  aiChatHistory      AiChatHistory[]
+  cvState            CvState?
+  settings           UserSettings?
+
+  @@map("users")
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  sessionToken String   @unique @map("session_token") @db.VarChar(128)
+  ipAddress    String?  @map("ip_address") @db.VarChar(45)
+  userAgent    String?  @map("user_agent") @db.Text
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model PersistentSession {
+  id        String   @id @db.VarChar(128)
+  data      String   @db.MediumText
+  timestamp Int      @db.UnsignedInt
+
+  @@map("persistent_sessions")
+}
+
+model Device {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  deviceKey       String   @map("device_key") @db.VarChar(100)
+  name            String   @db.VarChar(100)
+  icon            String   @default("fa-plug") @db.VarChar(50)
+  type            String   @default("switch") @db.VarChar(50)
+  topicSub        String?  @map("topic_sub") @db.VarChar(200)
+  topicPub        String?  @map("topic_pub") @db.VarChar(200)
+  isActive        Boolean  @default(true) @map("is_active")
+  lastState       Int      @default(0) @map("last_state")
+  latestState     Int      @default(0) @map("latest_state")
+  lastSeen        DateTime? @map("last_seen")
+  lastStateChanged DateTime? @map("last_state_changed")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceSessions DeviceSession[]
+
+  @@map("devices")
+}
+
+model DeviceSession {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @map("user_id")
+  deviceId       Int      @map("device_id")
+  turnedOnAt     DateTime @map("turned_on_at")
+  turnedOffAt    DateTime? @map("turned_off_at")
+  durationSec    Int?     @map("duration_seconds")
+  triggerType    String   @default("Manual") @map("trigger_type") @db.VarChar(50)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id])
+
+  @@map("device_sessions")
+}
+
+model Sensor {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  sensorKey   String   @map("sensor_key") @db.VarChar(100)
+  name        String   @db.VarChar(100)
+  type        String   @db.VarChar(50)
+  icon        String   @default("fa-microchip") @db.VarChar(50)
+  unit        String?  @db.VarChar(20)
+  topic       String   @db.VarChar(200)
+  latestValue Decimal? @map("latest_value") @db.Decimal(12, 4)
+  lastSeen    DateTime? @map("last_seen")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  readings     SensorReading[]
+  rules        AutomationRule[]
+
+  @@map("sensors")
+}
+
+model SensorReading {
+  id         BigInt   @id @default(autoincrement())
+  sensorId   Int      @map("sensor_id")
+  value      Decimal  @db.Decimal(12, 4)
+  recordedAt DateTime @default(now()) @map("recorded_at")
+
+  sensor Sensor @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  @@map("sensor_readings")
+}
+
+model AutomationRule {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  sensorId     Int?     @map("sensor_id")
+  deviceId     Int      @map("device_id")
+  conditionType String  @map("condition_type") @db.VarChar(20)
+  threshold    Decimal? @db.Decimal(10, 4)
+  thresholdMin Decimal? @map("threshold_min") @db.Decimal(10, 4)
+  thresholdMax Decimal? @map("threshold_max") @db.Decimal(10, 4)
+  action       String   @default("on") @db.VarChar(30)
+  delayMs      Int      @default(0) @map("delay_ms")
+  startTime    String?  @map("start_time") @db.VarChar(5)
+  endTime      String?  @map("end_time") @db.VarChar(5)
+  days         Json?
+  isEnabled    Boolean  @default(true) @map("is_enabled")
+  fromTemplate String?  @map("from_template") @db.VarChar(100)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sensor Sensor? @relation(fields: [sensorId], references: [id])
+
+  @@map("automation_rules")
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  label     String?  @db.VarChar(100)
+  timeHhmm  String   @map("time_hhmm") @db.Char(5)
+  days      Json?
+  action    String   @default("on") @db.VarChar(20)
+  devices   Json?
+  isEnabled Boolean  @default(true) @map("is_enabled")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("schedules")
+}
+
+model ActivityLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  deviceName  String   @map("device_name") @db.VarChar(100)
+  activity    String   @db.VarChar(200)
+  triggerType String   @map("trigger_type") @db.VarChar(50)
+  logType     String   @default("info") @map("log_type") @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("activity_logs")
+}
+
+model AiChatHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  sender    String   @db.VarChar(10)
+  message   String   @db.Text
+  platform  String   @default("web") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("ai_chat_history")
+}
+
+model CvState {
+  userId        Int      @id @map("user_id")
+  isActive      Boolean  @default(false) @map("is_active")
+  modelLoaded   Boolean  @default(false) @map("model_loaded")
+  personCount   Int      @default(0) @map("person_count")
+  brightness    Int      @default(0)
+  lightCondition String  @default("unknown") @map("light_condition") @db.VarChar(20)
+  lastUpdated   DateTime @updatedAt @map("last_updated")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("cv_state")
+}
+
+model UserSettings {
+  id                      Int      @id @default(autoincrement())
+  userId                  Int      @unique @map("user_id")
+  mqttTemplate            String?  @default("hivemq") @map("mqtt_template") @db.VarChar(50)
+  mqttBroker              String?  @default("broker.hivemq.com") @map("mqtt_broker") @db.VarChar(200)
+  mqttPort                Int?     @default(8884) @map("mqtt_port")
+  mqttUseSsl              Boolean? @default(true) @map("mqtt_use_ssl")
+  mqttUsername             String?  @map("mqtt_username") @db.VarChar(100)
+  mqttPasswordEnc         String?  @map("mqtt_password_enc") @db.Text
+  mqttClientId            String?  @map("mqtt_client_id") @db.VarChar(100)
+  mqttPath                String?  @default("/mqtt") @map("mqtt_path") @db.VarChar(100)
+  telegramChatId          String?  @map("telegram_chat_id") @db.VarChar(100)
+  telegramBotToken        String?  @map("telegram_bot_token") @db.VarChar(255)
+  automationLamp          Boolean? @default(true) @map("automation_lamp")
+  automationFan           Boolean? @default(true) @map("automation_fan")
+  automationLock          Boolean? @default(true) @map("automation_lock")
+  lampOnThreshold         Decimal? @default(0.3) @map("lamp_on_threshold") @db.Decimal(10, 4)
+  lampOffThreshold        Decimal? @default(0.7) @map("lamp_off_threshold") @db.Decimal(10, 4)
+  fanTempHigh             Decimal? @default(30) @map("fan_temp_high") @db.Decimal(10, 4)
+  fanTempNormal           Decimal? @default(25) @map("fan_temp_normal") @db.Decimal(10, 4)
+  lockDelay               Int?     @default(5000) @map("lock_delay")
+  theme                   String?  @default("light") @db.VarChar(20)
+  quickControlDevices     Json?    @map("quick_control_devices")
+  cvRules                 Json?    @map("cv_rules")
+  cvConfig                Json?    @map("cv_config")
+  cvMinConfidence         Decimal? @default(0.5) @map("cv_min_confidence") @db.Decimal(10, 4)
+  cvDarkThreshold         Decimal? @default(0.3) @map("cv_dark_threshold") @db.Decimal(10, 4)
+  cvBrightThreshold       Decimal? @default(0.7) @map("cv_bright_threshold") @db.Decimal(10, 4)
+  cvHumanRulesEnabled     Boolean? @default(true) @map("cv_human_rules_enabled")
+  cvLightRulesEnabled     Boolean? @default(true) @map("cv_light_rules_enabled")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model MqttTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  slug        String   @unique @db.VarChar(50)
+  broker      String   @db.VarChar(200)
+  port        Int      @default(1883)
+  useSsl      Boolean  @default(false) @map("use_ssl")
+  username    String?  @db.VarChar(100)
+  path        String?  @default("/mqtt") @db.VarChar(100)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("mqtt_templates")
+}
