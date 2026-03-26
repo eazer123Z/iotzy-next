@@ -12,10 +12,10 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(result, { status: 400 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Register error:", error);
     return NextResponse.json(
-      { success: false, error: "Server error." },
+      { success: false, error: error?.message || "Server error.", stack: error?.stack?.substring(0, 500) },
       { status: 500 }
     );
   }
