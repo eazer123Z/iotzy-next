@@ -18,36 +18,33 @@ export async function createSession(userId: number): Promise<string> {
   const token = nanoid(64);
   const expiresAt = new Date(Date.now() + 86400 * 1000); // 24h
 
-  // Clean old sessions
-  await prisma.session.deleteMany({
-    where: { userId, expiresAt: { lt: new Date() } },
-  });
-
-  await prisma.session.create({
-    data: {
-      userId,
-      sessionToken: token,
-      expiresAt,
-    },
-  });
-
-  // Update last login
-  await prisma.user.update({
-    where: { id: userId },
-    data: { lastLogin: new Date() },
-  });
-
-  // Ensure user_settings exists
-  await prisma.userSettings.upsert({
-    where: { userId },
-    create: {
-      userId,
-      mqttBroker: process.env.MQTT_HOST || "broker.hivemq.com",
-      mqttPort: parseInt(process.env.MQTT_PORT || "8884"),
-      mqttUseSsl: process.env.MQTT_USE_SSL === "true",
-    },
-    update: {},
-  });
+  // Run all DB operations in parallel (was sequential — super slow)
+  await Promise.all([
+    prisma.session.deleteMany({
+      where: { userId, expiresAt: { lt: new Date() } },
+    }),
+    prisma.session.create({
+      data: {
+        userId,
+        sessionToken: token,
+        expiresAt,
+      },
+    }),
+    prisma.user.update({
+      where: { id: userId },
+      data: { lastLogin: new Date() },
+    }),
+    prisma.userSettings.upsert({
+      where: { userId },
+      create: {
+        userId,
+        mqttBroker: process.env.MQTT_HOST || "broker.hivemq.com",
+        mqttPort: parseInt(process.env.MQTT_PORT || "8884"),
+        mqttUseSsl: process.env.MQTT_USE_SSL === "true",
+      },
+      update: {},
+    }),
+  ]);
 
   cookies().set("iotzy_session", token, {
     httpOnly: true,
@@ -66,9 +63,15 @@ export async function getSession(): Promise<SessionUser | null> {
 
   const session = await prisma.session.findUnique({
     where: { sessionToken: token, expiresAt: { gt: new Date() } },
-    include: {
+    select: {
       user: {
-        include: { settings: { select: { theme: true } } },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          fullName: true,
+          role: true,
+        },
       },
     },
   });
@@ -84,7 +87,7 @@ export async function getSession(): Promise<SessionUser | null> {
     email: session.user.email,
     fullName: session.user.fullName,
     role: session.user.role,
-    theme: session.user.settings?.theme || "dark",
+    theme: "dark",
   };
 }
 
@@ -145,7 +148,7 @@ export async function registerUser(
     };
   }
 
-  const hash = await bcrypt.hash(password, 12);
+  const hash = await bcrypt.hash(password, 10);
   await prisma.user.create({
     data: { username, email, passwordHash: hash, fullName: fullName || username },
   });

@@ -19,12 +19,13 @@ export default async function DashboardLayout({
       mqttUseSsl: true,
       mqttUsername: true,
       mqttPath: true,
+      theme: true,
     },
   });
 
   return (
     <DashboardLayoutClient
-      user={user}
+      user={{ ...user, theme: settings?.theme || "dark" }}
       settings={{
         mqttBroker: settings?.mqttBroker,
         mqttPort: settings?.mqttPort,
