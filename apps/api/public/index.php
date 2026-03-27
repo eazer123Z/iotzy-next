@@ -6,10 +6,16 @@ require_once __DIR__ . '/../src/Env.php';
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/DashboardRepository.php';
 require_once __DIR__ . '/../src/ModuleRepository.php';
+require_once __DIR__ . '/../src/Http/Response.php';
+require_once __DIR__ . '/../src/Http/Router.php';
+require_once __DIR__ . '/../src/Controllers/ApiController.php';
 
-use App\Database;
+use App\Controllers\ApiController;
 use App\DashboardRepository;
+use App\Database;
 use App\Env;
+use App\Http\Response;
+use App\Http\Router;
 use App\ModuleRepository;
 
 header('Content-Type: application/json; charset=utf-8');
@@ -24,82 +30,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $env = Env::load(__DIR__ . '/../.env');
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$userId = (int) ($_GET['userId'] ?? 1);
 
 try {
-    if ($path === '/api/health') {
-        echo json_encode([
-            'status' => 'ok',
-            'service' => 'iotzy-php-api',
-            'time' => gmdate(DATE_ATOM),
-        ], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    if ($path === '/api/menu') {
-        echo json_encode([
-            'items' => [
-                ['key' => 'dashboard', 'label' => 'Dashboard', 'endpoint' => '/api/dashboard'],
-                ['key' => 'devices', 'label' => 'Devices', 'endpoint' => '/api/devices'],
-                ['key' => 'sensors', 'label' => 'Sensors', 'endpoint' => '/api/sensors'],
-                ['key' => 'automation', 'label' => 'Automation', 'endpoint' => '/api/automation'],
-                ['key' => 'settings', 'label' => 'Settings', 'endpoint' => '/api/settings'],
-            ],
-        ], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    $userId = (int) ($_GET['userId'] ?? 1);
     $db = new Database($env);
-    $dashboardRepo = new DashboardRepository($db->pdo());
-    $moduleRepo = new ModuleRepository($db->pdo());
+    $controller = new ApiController(
+        new DashboardRepository($db->pdo()),
+        new ModuleRepository($db->pdo())
+    );
 
-    if ($path === '/api/dashboard') {
-        echo json_encode([
-            'userId' => $userId,
-            'stats' => $dashboardRepo->stats($userId),
-            'source' => 'php-native',
-        ], JSON_THROW_ON_ERROR);
-        exit;
+    $router = new Router();
+
+    $router->get('/api/health', function () use ($controller): void {
+        Response::json($controller->health());
+    });
+
+    $router->get('/api/menu', function () use ($controller): void {
+        Response::json($controller->menu());
+    });
+
+    $router->get('/api/dashboard', function () use ($controller, $userId): void {
+        Response::json($controller->dashboard($userId));
+    });
+
+    $router->get('/api/devices', function () use ($controller, $userId): void {
+        Response::json($controller->devices($userId));
+    });
+
+    $router->get('/api/sensors', function () use ($controller, $userId): void {
+        Response::json($controller->sensors($userId));
+    });
+
+    $router->get('/api/automation', function () use ($controller, $userId): void {
+        Response::json($controller->automation($userId));
+    });
+
+    $router->get('/api/settings', function () use ($controller, $userId): void {
+        Response::json($controller->settings($userId));
+    });
+
+    $router->get('/api/bootstrap', function () use ($controller, $userId): void {
+        Response::json($controller->bootstrap($userId));
+    });
+
+    if (!$router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $path)) {
+        Response::json(['error' => 'Not Found'], 404);
     }
-
-    if ($path === '/api/devices') {
-        echo json_encode(['userId' => $userId, 'items' => $moduleRepo->devices($userId)], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    if ($path === '/api/sensors') {
-        echo json_encode(['userId' => $userId, 'items' => $moduleRepo->sensors($userId)], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    if ($path === '/api/automation') {
-        echo json_encode(['userId' => $userId, 'items' => $moduleRepo->automation($userId)], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    if ($path === '/api/settings') {
-        echo json_encode(['userId' => $userId, 'item' => $moduleRepo->settings($userId)], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    if ($path === '/api/bootstrap') {
-        echo json_encode([
-            'userId' => $userId,
-            'dashboard' => $dashboardRepo->stats($userId),
-            'devices' => $moduleRepo->devices($userId),
-            'sensors' => $moduleRepo->sensors($userId),
-            'automation' => $moduleRepo->automation($userId),
-            'settings' => $moduleRepo->settings($userId),
-        ], JSON_THROW_ON_ERROR);
-        exit;
-    }
-
-    http_response_code(404);
-    echo json_encode(['error' => 'Not Found'], JSON_THROW_ON_ERROR);
 } catch (Throwable $e) {
-    http_response_code(500);
-    echo json_encode([
+    Response::json([
         'error' => 'Internal Server Error',
         'message' => $env->get('APP_DEBUG', 'false') === 'true' ? $e->getMessage() : 'Unexpected error',
-    ], JSON_THROW_ON_ERROR);
+    ], 500);
 }

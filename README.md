@@ -36,3 +36,8 @@ npm run dev
 ```bash
 npm run build
 ```
+
+
+## Dokumen arsitektur
+
+- `docs/ARCHITECTURE.md`

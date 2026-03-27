@@ -7,6 +7,6 @@
     "build": "npm --prefix apps/web run build",
     "preview": "npm --prefix apps/web run preview",
     "api:dev": "php -S 0.0.0.0:8080 -t apps/api/public",
-    "api:lint": "php -l apps/api/public/index.php && php -l apps/api/src/Env.php && php -l apps/api/src/Database.php && php -l apps/api/src/DashboardRepository.php && php -l apps/api/src/ModuleRepository.php"
+    "api:lint": "php -l apps/api/public/index.php && php -l apps/api/src/Env.php && php -l apps/api/src/Database.php && php -l apps/api/src/DashboardRepository.php && php -l apps/api/src/ModuleRepository.php && php -l apps/api/src/Http/Router.php && php -l apps/api/src/Http/Response.php && php -l apps/api/src/Controllers/ApiController.php"
   }
 }
