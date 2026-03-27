@@ -25,7 +25,7 @@ interface DeviceSlice {
   removeDevice: (id: string) => void;
 }
 
-const createDeviceSlice = (set: any): DeviceSlice => ({
+const createDeviceSlice = (set: any, get: any, api: any): DeviceSlice => ({
   devices: {},
   deviceStates: {},
   deviceExtras: {},
@@ -95,7 +95,7 @@ interface SensorSlice {
   removeSensor: (id: string) => void;
 }
 
-const createSensorSlice = (set: any): SensorSlice => ({
+const createSensorSlice = (set: any, get: any, api: any): SensorSlice => ({
   sensors: {},
   sensorData: {},
   sensorHistory: {},
@@ -162,7 +162,7 @@ interface UISlice {
   setSchedules: (schedules: Schedule[]) => void;
 }
 
-const createUISlice = (set: any): UISlice => ({
+const createUISlice = (set: any, get: any, api: any): UISlice => ({
   logs: [],
   logTypeFilter: "all",
   logSearchFilter: "",
@@ -190,8 +190,8 @@ const createUISlice = (set: any): UISlice => ({
 // ─── COMBINED STORE EXPORT ───
 export type AppState = DeviceSlice & SensorSlice & UISlice;
 
-export const useAppStore = create<AppState>((...a) => ({
-  ...createDeviceSlice(...a),
-  ...createSensorSlice(...a),
-  ...createUISlice(...a),
+export const useAppStore = create<AppState>((set, get, api) => ({
+  ...createDeviceSlice(set, get, api),
+  ...createSensorSlice(set, get, api),
+  ...createUISlice(set, get, api),
 }));

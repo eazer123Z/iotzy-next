@@ -64,6 +64,8 @@ export async function getSession(): Promise<SessionUser | null> {
   const session = await prisma.session.findUnique({
     where: { sessionToken: token, expiresAt: { gt: new Date() } },
     select: {
+      id: true,
+      createdAt: true,
       user: {
         select: {
           id: true,
