@@ -72,21 +72,23 @@ export const getSession = cache(async (): Promise<SessionUser | null> => {
     return null;
   }
 
-  // SESSION ROTATION LOGIC:
+  // SESSION STABILITY LOGIC:
   // Jika sisa waktu session kurang dari 12 jam, perpanjang otomatis (sliding)
+  // [FIX] Jangan ganti token (rotation), cukup perpanjang waktu kadaluarsa di DB 
+  // untuk menghindari race condition saat multi-tab.
   const remainingMs = session.expiresAt.getTime() - Date.now();
   const twelveHoursMs = 12 * 3600 * 1000;
 
   if (remainingMs < twelveHoursMs) {
-    const newToken = nanoid(64);
     const newExpiresAt = new Date(Date.now() + 86400 * 1000); // prolong 24h
 
     await prisma.session.update({
       where: { id: session.id },
-      data: { sessionToken: newToken, expiresAt: newExpiresAt },
+      data: { expiresAt: newExpiresAt },
     });
 
-    cookies().set("iotzy_session", newToken, {
+    // Perbarui cookie (opsional, tapi bagus untuk memperpanjang maxAge di browser)
+    cookies().set("iotzy_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

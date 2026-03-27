@@ -64,66 +64,78 @@ export default function Topbar({
   }, []);
 
   return (
-    <header className="fixed top-0 right-0 h-topbar bg-bg/80 backdrop-blur-xl border-b border-border z-30 flex items-center justify-between px-5 left-0 lg:left-[var(--sidebar-w)]">
-      {/* Left */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onToggleSidebar}
-          className="lg:hidden text-txt-secondary hover:text-txt p-2 -ml-2 rounded-lg hover:bg-surface transition"
-        >
-          <i className="fas fa-bars text-lg"></i>
-        </button>
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-txt-muted font-semibold hidden sm:inline">
-            IoTzy
-          </span>
-          <i className="fas fa-chevron-right text-txt-muted text-[10px] hidden sm:inline"></i>
-          <span className="font-bold text-heading">{pageTitle}</span>
-        </div>
-      </div>
-
-      {/* Right */}
-      <div className="flex items-center gap-3">
-        {/* Stats — hidden on mobile */}
-        <div className="hidden md:flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface text-xs">
-            <i className="fas fa-microchip text-accent text-[10px]"></i>
-            <span className="font-bold">{activeCount}</span>
-            <span className="text-txt-muted">/{deviceCount}</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface text-xs">
-            <i className="fas fa-signal text-success text-[10px]"></i>
-            <span className="font-bold">{sensorCount}</span>
+    <header className="fixed top-0 right-0 h-topbar z-30 flex items-center justify-between px-6 left-0 lg:left-[var(--sidebar-w)] transition-all duration-300">
+      <div className="absolute inset-x-4 inset-y-2 bg-surface/40 backdrop-blur-[var(--glass-blur)] border border-border/50 rounded-2xl shadow-lg flex items-center justify-between px-5">
+        {/* Left */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onToggleSidebar}
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-text-secondary hover:text-accent rounded-xl hover:bg-white/5 transition-all duration-300"
+          >
+            <i className="fas fa-bars-staggered text-lg"></i>
+          </button>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-xs font-black uppercase tracking-[3px] text-text-muted opacity-40">IoTzy</span>
+              <span className="text-border">/</span>
+            </div>
+            <h1 className="font-black text-heading tracking-tight animate-fadeIn">{pageTitle}</h1>
           </div>
         </div>
 
-        {/* MQTT */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface">
-          <span
-            className={clsx(
-              "w-2 h-2 rounded-full",
-              mqttConnected ? "bg-success animate-pulse" : "bg-txt-muted"
-            )}
-          />
-          <span className="text-xs font-medium">
-            {mqttConnected ? "MQTT" : "Off"}
-          </span>
-        </div>
-
-        {/* Clock — hidden on small screens */}
-        {mounted && (
-          <div className="text-right hidden sm:block">
-            <div className="text-sm font-mono font-bold">{clock}</div>
-            <div className="text-[10px] text-txt-muted">{date}</div>
+        {/* Right */}
+        <div className="flex items-center gap-4">
+          {/* Stats Bar */}
+          <div className="hidden xl:flex items-center gap-3 bg-black/20 p-1 rounded-xl border border-white/5">
+            <div className="flex items-center gap-2 px-3 py-1 color-filter transition-all hover:bg-white/5 rounded-lg group">
+              <i className="fas fa-microchip text-accent text-xs group-hover:scale-110 transition-transform"></i>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black text-text-muted leading-none">DEVICES</span>
+                <span className="text-xs font-bold text-heading leading-tight">{activeCount}<span className="text-text-muted font-medium opacity-50 ml-0.5">/{deviceCount}</span></span>
+              </div>
+            </div>
+            <div className="w-px h-6 bg-border/50"></div>
+            <div className="flex items-center gap-2 px-3 py-1 color-filter transition-all hover:bg-white/5 rounded-lg group">
+              <i className="fas fa-signal text-success text-xs group-hover:scale-110 transition-transform"></i>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black text-text-muted leading-none">SENSORS</span>
+                <span className="text-xs font-bold text-heading leading-tight">{sensorCount}</span>
+              </div>
+            </div>
           </div>
-        )}
 
-        {/* Avatar */}
-        <div
-          className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center text-xs font-bold uppercase"
-          title={username}
-        >
-          {username.charAt(0)}
+          {/* MQTT Status Chip */}
+          <div className={clsx(
+            "flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-500",
+            mqttConnected 
+              ? "bg-success/5 border-success/20 text-success shadow-[0_0_15px_rgba(0,255,157,0.05)]" 
+              : "bg-surface/50 border-border/50 text-text-muted"
+          )}>
+            <div className={clsx(
+              "w-1.5 h-1.5 rounded-full",
+              mqttConnected ? "bg-success animate-pulse shadow-[0_0_8px_var(--success)]" : "bg-text-muted"
+            )} />
+            <span className="text-[10px] font-black tracking-widest uppercase">{mqttConnected ? "MQTT ONLINE" : "OFFLINE"}</span>
+          </div>
+
+          {/* Clock Section */}
+          {mounted && (
+            <div className="hidden md:flex flex-col items-end pr-1 border-r border-border/50 mr-1">
+              <span className="text-sm font-black font-mono text-heading leading-none tracking-tighter">{clock}</span>
+              <span className="text-[9px] font-black text-text-muted tracking-[1px] mt-0.5 opacity-60 uppercase">{date}</span>
+            </div>
+          )}
+
+          {/* Profile Circle */}
+          <div className="group relative">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent-light p-[1px] cursor-pointer hover:shadow-[0_0_15px_var(--accent-glow)] transition-all duration-300">
+              <div className="w-full h-full rounded-xl bg-surface-solid flex items-center justify-center text-accent font-black text-sm uppercase">
+                {username.charAt(0)}
+              </div>
+            </div>
+            {/* Simple Glow effect */}
+            <div className="absolute -inset-1 bg-accent/20 blur-xl opacity-0 group-hover:opacity-40 transition-opacity rounded-full"></div>
+          </div>
         </div>
       </div>
     </header>

@@ -43,20 +43,23 @@ export default function Sidebar({ user, settings }: SidebarProps) {
   const sensorCount = Object.keys(sensors).length;
 
   return (
-    <aside className="h-full w-sidebar bg-bg-2 border-r border-border flex flex-col overflow-y-auto">
+    <aside className="h-full w-sidebar bg-surface/30 backdrop-blur-[var(--glass-blur)] border-r border-border flex flex-col overflow-y-auto animate-slideIn">
       {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-border">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white text-lg">
+      <div className="flex items-center gap-3 px-6 py-6 border-b border-border/50">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-bg text-xl shadow-[0_0_20px_var(--accent-glow)]">
           <i className="fas fa-bolt"></i>
         </div>
-        <span className="font-extrabold text-lg text-heading">IoTzy</span>
+        <div className="flex flex-col">
+          <span className="font-extrabold text-xl text-heading tracking-tight">IoTzy</span>
+          <span className="text-[10px] uppercase tracking-[3px] text-accent font-bold -mt-1 opacity-80">Enterprise</span>
+        </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         {navGroups.map((group) => (
-          <div key={group.label}>
-            <div className="text-[10px] font-bold uppercase tracking-wider text-txt-muted px-3 mb-2 mt-3 first:mt-0">
+          <div key={group.label} className="space-y-1">
+            <div className="text-[10px] font-black uppercase tracking-[2px] text-text-muted px-4 mb-3 opacity-50">
               {group.label}
             </div>
             {group.items.map((item) => {
@@ -76,18 +79,26 @@ export default function Sidebar({ user, settings }: SidebarProps) {
                   key={item.href}
                   href={item.href}
                   className={clsx(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                    "group flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-semibold transition-all duration-300 relative overflow-hidden",
                     isActive
-                      ? "bg-accent-bg text-accent"
-                      : "text-txt-secondary hover:bg-surface hover:text-txt"
+                      ? "bg-accent-bg text-accent border border-accent/20 shadow-[0_0_15px_rgba(0,242,255,0.05)]"
+                      : "text-text-secondary hover:bg-white/5 hover:text-heading"
                   )}
                 >
-                  <i className={`fas ${item.icon} w-5 text-center`}></i>
+                  <div className={clsx(
+                    "w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300",
+                    isActive ? "bg-accent/10" : "bg-white/5 group-hover:bg-accent/10"
+                  )}>
+                    <i className={`fas ${item.icon} text-base`}></i>
+                  </div>
                   <span className="flex-1">{item.label}</span>
                   {badge !== null && badge > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-accent/20 text-accent">
+                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-black bg-accent/20 text-accent border border-accent/20">
                       {badge}
                     </span>
+                  )}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-accent rounded-r-full" />
                   )}
                 </Link>
               );
@@ -97,40 +108,41 @@ export default function Sidebar({ user, settings }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-border p-3">
-        <div className="flex items-center gap-3 p-2 rounded-xl bg-surface">
-          <div className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center text-sm font-bold">
+      <div className="border-t border-border/50 p-4 bg-black/20">
+        <div className="flex items-center gap-3 p-3 rounded-2xl bg-surface/50 border border-border/50 hover:border-accent/30 transition-all duration-300 group">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-surface-solid to-border flex items-center justify-center text-accent text-lg font-black border border-border shadow-inner">
             {user.username.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold truncate">
+            <div className="text-sm font-bold text-heading truncate group-hover:text-accent transition-colors">
               {user.fullName || user.username}
             </div>
-            <div className="text-[10px] text-txt-muted">{user.role}</div>
+            <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider">{user.role}</div>
           </div>
           <Link
             href="/api/auth/logout"
-            className="text-txt-muted hover:text-danger transition-colors p-1"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-danger/10 hover:text-danger transition-all"
             title="Logout"
+            prefetch={false}
           >
-            <i className="fas fa-right-from-bracket text-sm"></i>
+            <i className="fas fa-power-off text-sm"></i>
           </Link>
         </div>
 
-        <div className="flex items-center justify-between px-2 mt-2">
+        <div className="flex items-center justify-between px-3 mt-4">
           <div className="flex items-center gap-2">
-            <span
-              className={clsx(
-                "w-2 h-2 rounded-full",
-                mqttConnected ? "bg-success" : "bg-txt-muted"
-              )}
-            />
-            <span className="text-[11px] text-txt-muted">
-              {mqttConnected ? "Online" : "Offline"}
+            <div className="relative">
+              <span className={clsx(
+                "w-2.5 h-2.5 rounded-full block",
+                mqttConnected ? "bg-success shadow-[0_0_10px_var(--success)] animate-pulse" : "bg-text-muted"
+              )} />
+            </div>
+            <span className="text-[11px] font-black uppercase tracking-widest text-text-muted">
+              {mqttConnected ? "Connected" : "Discon"}
             </span>
           </div>
-          <span className="text-[10px] text-txt-muted truncate max-w-[140px]">
-            {settings.mqttBroker || "—"}
+          <span className="text-[9px] font-mono text-text-muted truncate max-w-[120px] opacity-40">
+            {settings.mqttBroker || "no-broker"}
           </span>
         </div>
       </div>
