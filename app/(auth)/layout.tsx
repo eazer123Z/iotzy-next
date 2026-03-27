@@ -2,7 +2,6 @@ import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
-
 export default async function AuthLayout({
   children,
 }: {
@@ -12,29 +11,35 @@ export default async function AuthLayout({
   if (user) redirect("/");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg overflow-hidden relative">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(191,0,255,0.08)_0%,transparent_50%)]" />
+    <div className="min-h-screen flex items-center justify-center bg-bg overflow-hidden relative selection:bg-accent selection:text-bg">
+      {/* Background subtle decorations */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 blur-[120px] rounded-full -mr-64 -mt-64 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-danger/5 blur-[120px] rounded-full -ml-64 -mb-64 pointer-events-none" />
 
-      <div className="w-full max-w-md z-10 animate-fadeIn px-4">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-[72px] h-[72px] rounded-[20px] bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-3xl text-white shadow-[0_0_30px_var(--accent-glow)] animate-pulse">
-            <i className="fas fa-bolt"></i>
+      <div className="w-full max-w-md z-10 animate-fadeIn px-6">
+        {/* Header Section */}
+        <div className="flex flex-col items-center mb-10">
+          <div className="w-14 h-14 rounded-2xl bg-accent text-bg shadow-sm flex items-center justify-center text-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
+            <i className="fas fa-microchip"></i>
           </div>
-          <h1 className="text-[32px] font-extrabold mt-5 text-heading">
-            IoTzy
+          <h1 className="text-3xl font-black mt-6 text-heading tracking-tighter">
+            IoTzy <span className="text-accent underline decoration-accent/20 underline-offset-8">Smooth</span>
           </h1>
         </div>
 
-        {/* Auth Card */}
-        <div className="bg-[rgba(10,15,30,0.6)] backdrop-blur-[25px] border border-border rounded-[24px] p-9 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)]">
+        {/* Auth Content Card */}
+        <div className="card p-10 shadow-sm bg-surface/40">
           {children}
         </div>
 
-        <p className="text-center text-txt-muted text-xs mt-8">
-          IoTzy By Rendy Aulia Nur
-        </p>
+        <div className="flex flex-col items-center mt-10 space-y-2 opacity-40">
+           <p className="text-[10px] font-black uppercase tracking-[3px] text-text-muted">
+             DeepMind Agentic Systems :: v4.1.0
+           </p>
+           <p className="text-[9px] font-bold text-text-muted">
+             (C) 2026 :: All Rights Reserved
+           </p>
+        </div>
       </div>
     </div>
   );
