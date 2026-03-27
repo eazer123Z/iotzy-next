@@ -64,7 +64,7 @@ export default function SensorsContent({
         <div className="space-y-1">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_var(--accent-glow)]" />
-            <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted">High Precision Sensing</span>
+            <span className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted">High Precision Sensing</span>
           </div>
           <h1 className="text-3xl font-black text-heading tracking-tighter">Environmental Data</h1>
           <p className="text-text-secondary text-sm font-bold opacity-60">Real-time telemetry from your wide-area sensor network.</p>
@@ -72,7 +72,7 @@ export default function SensorsContent({
         
         <div className="flex items-center gap-4">
            <div className="relative group">
-              <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[10px] text-text-muted"></i>
+              <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[10px] text-txt-muted"></i>
               <input
                 type="text"
                 placeholder="Lookup signal..."
@@ -94,7 +94,7 @@ export default function SensorsContent({
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4">
         {filtered.map((s) => {
           const id = String(s.id);
-          const meta = SENSOR_META[s.type] || { icon: "fa-microchip", color: "text-text-muted", bg: "bg-surface", unit: "", max: 100 };
+          const meta = SENSOR_META[s.type] || { icon: "fa-microchip", color: "text-txt-muted", bg: "bg-surface", unit: "", max: 100 };
           const value = sensorData[id] ?? s.latestValue;
           const isOnline = s.lastSeen && new Date(s.lastSeen).getTime() > Date.now() - 5 * 60 * 1000;
           const pct = value != null ? Math.min(100, Math.max(0, (Number(value) / meta.max) * 100)) : 0;
@@ -114,14 +114,14 @@ export default function SensorsContent({
                        <h3 className="text-lg font-black text-heading uppercase tracking-tighter truncate leading-none mb-1">{s.name}</h3>
                        <div className="flex items-center gap-2">
                           <div className={clsx("w-1.5 h-1.5 rounded-full", isOnline ? "bg-success shadow-[0_0_8px_var(--success)] animate-pulse" : "bg-text-muted")} />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">{isOnline ? "Live" : "Inactive"}</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-txt-muted">{isOnline ? "Live" : "Inactive"}</span>
                        </div>
                     </div>
                  </div>
 
                  <button
                    onClick={() => handleDelete(id)}
-                   className="w-8 h-8 rounded-xl bg-bg-2 flex items-center justify-center text-[10px] text-text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-all"
+                   className="w-8 h-8 rounded-xl bg-bg-2 flex items-center justify-center text-[10px] text-txt-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-all"
                  >
                    <i className="fas fa-trash-alt"></i>
                  </button>
@@ -133,11 +133,11 @@ export default function SensorsContent({
                     <span className="text-4xl font-black text-heading font-mono tracking-tighter leading-none">
                        {value != null ? value : "0.0"}
                     </span>
-                    <span className="text-xs font-black text-text-muted uppercase tracking-widest">
+                    <span className="text-xs font-black text-txt-muted uppercase tracking-widest">
                        {s.unit || meta.unit}
                     </span>
                  </div>
-                 <span className="text-[9px] font-black text-text-muted uppercase tracking-[3px] mt-2 opacity-40">System Reading</span>
+                 <span className="text-[9px] font-black text-txt-muted uppercase tracking-[3px] mt-2 opacity-40">System Reading</span>
               </div>
 
               {/* Progress Detail */}
@@ -146,7 +146,7 @@ export default function SensorsContent({
                    <div className="progress-rail">
                       <div className={clsx("progress-bar", meta.color.replace('text-', 'bg-'))} style={{ width: `${pct}%` }} />
                    </div>
-                   <div className="flex justify-between items-center text-[8px] font-black text-text-muted uppercase tracking-widest opacity-60">
+                   <div className="flex justify-between items-center text-[8px] font-black text-txt-muted uppercase tracking-widest opacity-60">
                       <span>Baseline</span>
                       <span>Target: {meta.max}</span>
                    </div>
@@ -158,7 +158,7 @@ export default function SensorsContent({
                  <div className="mt-auto relative z-10">
                     <div className={clsx(
                        "inline-flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all",
-                       (value ?? 0) > 0 ? "bg-success-bg border-success text-success" : "bg-bg-2 border-border text-text-muted"
+                       (value ?? 0) > 0 ? "bg-success-bg border-success text-success" : "bg-bg-2 border-border text-txt-muted"
                     )}>
                        <i className={`fas ${(value ?? 0) > 0 ? 'fa-check-circle' : 'fa-circle-notch'} text-[10px]`}></i>
                        <span className="text-[9px] font-black uppercase tracking-widest">{(value ?? 0) > 0 ? "Occupied" : "Unoccupied"}</span>
@@ -167,7 +167,7 @@ export default function SensorsContent({
               )}
 
               {/* Network Context */}
-              <div className="mt-4 pt-4 border-t border-border/40 flex items-center justify-between text-[8px] font-mono text-text-muted opacity-40">
+              <div className="mt-4 pt-4 border-t border-border/40 flex items-center justify-between text-[8px] font-mono text-txt-muted opacity-40">
                  <span className="truncate max-w-[150px]">{s.topic}</span>
                  <span>{s.lastSeen ? new Date(s.lastSeen).toLocaleTimeString("en-US", { hour12: false, hour: '2-digit', minute: '2-digit' }) : "—:—"}</span>
               </div>
@@ -177,12 +177,12 @@ export default function SensorsContent({
 
         {filtered.length === 0 && (
           <div className="col-span-full card p-24 flex flex-col items-center justify-center text-center space-y-4 border-dashed opacity-50">
-             <div className="w-16 h-16 rounded-full bg-bg-2 flex items-center justify-center text-text-muted text-2xl">
+             <div className="w-16 h-16 rounded-full bg-bg-2 flex items-center justify-center text-txt-muted text-2xl">
                 <i className="fas fa-satellite-dish"></i>
              </div>
              <div>
                 <h4 className="text-sm font-black text-heading uppercase">Silent Frequency</h4>
-                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">No sensor links found in this range</p>
+                <p className="text-[10px] font-bold text-txt-muted uppercase tracking-widest">No sensor links found in this range</p>
              </div>
           </div>
         )}
@@ -194,14 +194,14 @@ export default function SensorsContent({
           <div className="card w-full max-w-lg overflow-hidden animate-slideUp shadow-2xl">
             <div className="px-8 py-6 border-b border-border shadow-sm flex items-center justify-between bg-white/[0.02]">
                <h2 className="text-lg font-black text-heading uppercase tracking-tighter">Register New Signal link</h2>
-               <button onClick={() => setShowModal(false)} className="text-text-muted hover:text-danger">
+               <button onClick={() => setShowModal(false)} className="text-txt-muted hover:text-danger">
                   <i className="fas fa-times"></i>
                </button>
             </div>
             
             <div className="p-8 space-y-6">
                <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Signal Name</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Signal Name</label>
                   <input
                     type="text"
                     placeholder="e.g. Server Room Thermal"
@@ -213,7 +213,7 @@ export default function SensorsContent({
 
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                     <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Telemetry Type</label>
+                     <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Telemetry Type</label>
                      <select 
                        value={form.type} 
                        onChange={(e) => setForm({ ...form, type: e.target.value })} 
@@ -225,7 +225,7 @@ export default function SensorsContent({
                      </select>
                   </div>
                   <div className="space-y-2">
-                     <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Unit Tag</label>
+                     <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Unit Tag</label>
                      <input
                        type="text"
                        placeholder="e.g. °C, %"
@@ -237,7 +237,7 @@ export default function SensorsContent({
                </div>
 
                <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Network Path (Topic)</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Network Path (Topic)</label>
                   <input
                     type="text"
                     placeholder="iotzy/sensors/therm_01"
@@ -249,7 +249,7 @@ export default function SensorsContent({
             </div>
 
             <div className="px-8 py-6 bg-white/[0.02] border-t border-border flex gap-4">
-               <button onClick={() => setShowModal(false)} className="flex-1 py-4 rounded-2xl bg-bg-2 text-[10px] font-black uppercase tracking-widest text-text-muted">Discard</button>
+               <button onClick={() => setShowModal(false)} className="flex-1 py-4 rounded-2xl bg-bg-2 text-[10px] font-black uppercase tracking-widest text-txt-muted">Discard</button>
                <button onClick={handleAdd} className="flex-1 py-4 rounded-2xl bg-accent text-bg text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-[1.02] active:scale-95 transition-all">Establish Link</button>
             </div>
           </div>
