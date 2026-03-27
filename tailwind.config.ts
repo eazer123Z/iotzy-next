@@ -45,11 +45,11 @@ const config: Config = {
           DEFAULT: "var(--info)",
           bg: "var(--info-bg)",
         },
-        txt: {
+        heading: "var(--heading)",
+        text: {
           DEFAULT: "var(--text)",
           secondary: "var(--text-secondary)",
           muted: "var(--text-muted)",
-          heading: "var(--heading)",
         },
       },
       fontFamily: {
