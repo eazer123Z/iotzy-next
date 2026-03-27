@@ -242,7 +242,7 @@ export default function DevicesContent({
                        placeholder="topic/status"
                        value={form.topic_sub}
                        onChange={(e) => setForm({ ...form, topic_sub: e.target.value })}
-                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono"
+                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono"
                      />
                   </div>
                   <div className="space-y-2">
@@ -252,7 +252,7 @@ export default function DevicesContent({
                        placeholder="topic/cmd"
                        value={form.topic_pub}
                        onChange={(e) => setForm({ ...form, topic_pub: e.target.value })}
-                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono"
+                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono"
                      />
                   </div>
                </div>

@@ -199,10 +199,10 @@ body::before {
     @apply inline-flex items-center px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-[1px];
   }
 
-  .badge-success { @apply badge bg-success-bg text-success border border-success/20; }
-  .badge-warning { @apply badge bg-warning-bg text-warning border border-warning/20; }
-  .badge-danger  { @apply badge bg-danger-bg text-danger border border-danger/20; }
-  .badge-info    { @apply badge bg-info-bg text-info border border-info/20; }
+  .badge-success { @apply badge bg-success-bg text-success border-success; }
+  .badge-warning { @apply badge bg-warning-bg text-warning border-warning; }
+  .badge-danger  { @apply badge bg-danger-bg text-danger border-danger; }
+  .badge-info    { @apply badge bg-info-bg text-info border-info; }
 }
 
 /* ── Custom Inputs ── */
@@ -296,7 +296,7 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
 
 /* ── Progress Indicators (Smooth) ── */
 .progress-rail {
-  @apply w-full h-1.5 bg-border/40 rounded-full overflow-hidden relative;
+  @apply w-full h-1.5 bg-border rounded-full overflow-hidden relative;
 }
 .progress-bar {
   @apply h-full bg-accent transition-all duration-1000;

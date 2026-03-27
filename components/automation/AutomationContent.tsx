@@ -283,7 +283,7 @@ export default function AutomationContent({ rules: initialRules, schedules: init
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Threshold</label>
-                     <input type="number" value={form.threshold} onChange={(e) => setForm({ ...form, threshold: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                     <input type="number" value={form.threshold} onChange={(e) => setForm({ ...form, threshold: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent text-xs font-bold" />
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Desired State</label>
@@ -297,11 +297,11 @@ export default function AutomationContent({ rules: initialRules, schedules: init
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Window Start</label>
-                     <input type="time" value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                     <input type="time" value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent text-xs font-bold" />
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Window End</label>
-                     <input type="time" value={form.end_time} onChange={(e) => setForm({ ...form, end_time: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                     <input type="time" value={form.end_time} onChange={(e) => setForm({ ...form, end_time: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent text-xs font-bold" />
                   </div>
                </div>
             </div>

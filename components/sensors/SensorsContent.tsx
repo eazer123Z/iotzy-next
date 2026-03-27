@@ -158,7 +158,7 @@ export default function SensorsContent({
                  <div className="mt-auto relative z-10">
                     <div className={clsx(
                        "inline-flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all",
-                       (value ?? 0) > 0 ? "bg-success/10 border-success/20 text-success" : "bg-bg-2 border-border text-text-muted"
+                       (value ?? 0) > 0 ? "bg-success-bg border-success text-success" : "bg-bg-2 border-border text-text-muted"
                     )}>
                        <i className={`fas ${(value ?? 0) > 0 ? 'fa-check-circle' : 'fa-circle-notch'} text-[10px]`}></i>
                        <span className="text-[9px] font-black uppercase tracking-widest">{(value ?? 0) > 0 ? "Occupied" : "Unoccupied"}</span>

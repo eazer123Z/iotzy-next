@@ -256,11 +256,11 @@ export default function DashboardContent({
                        <div className="flex flex-col items-center">
                           <div className={clsx(
                              "w-8 h-8 rounded-xl flex items-center justify-center text-[10px] border transition-all duration-300",
-                             log.logType === 'error' ? "bg-danger-bg border-danger/20 text-danger" : "bg-bg-2 border-border/50 text-text-muted group-hover:text-accent group-hover:border-accent/20"
+                             log.logType === 'error' ? "bg-danger-bg border-danger text-danger" : "bg-bg-2 border-border text-text-muted group-hover:text-accent group-hover:border-accent"
                           )}>
                              <i className={`fas ${log.triggerType === 'Manual' ? 'fa-user' : 'fa-robot'}`}></i>
                           </div>
-                          {i !== initialLogs.length - 1 && <div className="w-[1px] flex-1 bg-border/20 mt-2"></div>}
+                          {i !== initialLogs.length - 1 && <div className="w-[1px] flex-1 bg-border mt-2"></div>}
                        </div>
                        <div className="flex-1 min-w-0 pb-2">
                           <div className="flex justify-between items-start">

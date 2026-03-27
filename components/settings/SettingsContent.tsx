@@ -113,7 +113,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
       {msg && (
         <div className={clsx(
           "mx-4 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[2px] border animate-slideDown shadow-sm flex items-center justify-between",
-          msg.startsWith("✅") ? "bg-success/5 border-success/20 text-success" : "bg-danger/5 border-danger/20 text-danger"
+          msg.startsWith("✅") ? "bg-success-bg border-success text-success" : "bg-danger-bg border-danger text-danger"
         )}>
           <span>{msg}</span>
           <button onClick={() => setMsg("")} className="opacity-40 hover:opacity-100">
