@@ -30,8 +30,8 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (data.success) {
-        router.push("/");
-        router.refresh();
+        // Hard redirect — ensures cookie is committed before navigation
+        window.location.href = "/";
       } else {
         setError(data.error || "Login gagal.");
       }
