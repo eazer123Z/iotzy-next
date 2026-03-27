@@ -20,38 +20,31 @@ export async function GET() {
   return NextResponse.json({ success: true, settings, templates });
 }
 
+import { SettingsUpdateSchema } from "@/lib/validators";
+
 export async function POST(req: Request) {
   const user = await getSession();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await req.json();
+  let body;
+  try {
+    body = await req.json();
+  } catch (e) {
+    return NextResponse.json({ error: "Invalid JSON format" }, { status: 400 });
+  }
 
-  // Build update object dynamically
-  const allowedFields = [
-    "mqtt_broker",
-    "mqtt_port",
-    "mqtt_path",
-    "mqtt_client_id",
-    "mqtt_username",
-    "mqtt_use_ssl",
-    "telegram_chat_id",
-    "automation_lamp",
-    "automation_fan",
-    "automation_lock",
-    "lamp_on_threshold",
-    "lamp_off_threshold",
-    "fan_temp_high",
-    "fan_temp_normal",
-    "lock_delay",
-    "theme",
-    "quick_control_devices",
-    "cv_min_confidence",
-    "cv_dark_threshold",
-    "cv_bright_threshold",
-    "cv_human_rules_enabled",
-    "cv_light_rules_enabled",
-  ];
+  // ZOD VALIDATION (Strict Schema)
+  const validation = SettingsUpdateSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json({ 
+      error: "Validation Error", 
+      details: validation.error.format() 
+    }, { status: 400 });
+  }
 
+  const validData = validation.data;
+
+  // DB Map
   const fieldMap: Record<string, string> = {
     mqtt_broker: "mqttBroker",
     mqtt_port: "mqttPort",
@@ -60,6 +53,7 @@ export async function POST(req: Request) {
     mqtt_username: "mqttUsername",
     mqtt_use_ssl: "mqttUseSsl",
     telegram_chat_id: "telegramChatId",
+    telegram_bot_token: "telegramBotToken",
     automation_lamp: "automationLamp",
     automation_fan: "automationFan",
     automation_lock: "automationLock",
@@ -79,8 +73,8 @@ export async function POST(req: Request) {
 
   const updateData: Record<string, any> = {};
   for (const [phpKey, prismaKey] of Object.entries(fieldMap)) {
-    if (phpKey in body) {
-      updateData[prismaKey] = body[phpKey];
+    if (phpKey in validData) {
+      updateData[prismaKey] = (validData as any)[phpKey];
     }
   }
 

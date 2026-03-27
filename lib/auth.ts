@@ -81,6 +81,27 @@ export async function getSession(): Promise<SessionUser | null> {
     return null;
   }
 
+  // SESSION ROTATION LOGIC:
+  // Jika umur session sudah lebih dari 12 jam, rotasi tokennya 
+  const ageInHours = (Date.now() - session.createdAt.getTime()) / 3600000;
+  if (ageInHours > 12) {
+    const newToken = nanoid(64);
+    const newExpiresAt = new Date(Date.now() + 86400 * 1000); // prolong 24h
+    
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { sessionToken: newToken, expiresAt: newExpiresAt, createdAt: new Date() }
+    });
+
+    cookies().set("iotzy_session", newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 86400,
+      path: "/",
+    });
+  }
+
   return {
     id: session.user.id,
     username: session.user.username,

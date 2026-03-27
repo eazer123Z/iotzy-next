@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useAppStore } from "@/lib/store";
+import { socket } from "@/lib/socket";
 import type { Device, Sensor, CvState, ActivityLog } from "@/types";
 
 interface DashboardContentProps {
@@ -48,6 +49,31 @@ export default function DashboardContent({
     if (cvState) setCv(cvState);
     setLogs(initialLogs);
     setQuickControls(quickControls);
+
+    // 🌐 [MQTT WEB-SOCKET BRIDGE] MENGHANCURKAN POLA LAMA
+    // 1. Jalankan koneksi socket
+    socket.connect();
+
+    // 2. Berlangganan event perangkat yang tertembak dari MQTT via Server.ts
+    socket.on("device_update", (payload: { topic: string; data: any }) => {
+      console.log("⚡ [WS] Real-Time Sync:", payload);
+      // Asumsi Payload "iotzy/{deviceKey}/status" { state: 1 }
+      if (payload.data && payload.data.deviceKey) {
+
+        // Temukan ID berdasarkan deviceKey yang dibawa
+        const deviceMatch = initialDevices.find(d => d.deviceKey === payload.data.deviceKey);
+
+        if (deviceMatch && payload.data.state !== undefined) {
+          // UPDATE STORE STATE SECARA INSTAN TANPA POLLING API
+          setDeviceState(String(deviceMatch.id), payload.data.state === 1);
+        }
+      }
+    });
+
+    return () => {
+      socket.off("device_update");
+      socket.disconnect();
+    };
   }, []);
 
   // Real-time clock
@@ -207,22 +233,20 @@ export default function DashboardContent({
                       className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface/50 transition-colors"
                     >
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs ${
-                          log.logType === "success"
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs ${log.logType === "success"
                             ? "bg-success/10 text-success"
                             : log.logType === "warning"
-                            ? "bg-warning/10 text-warning"
-                            : "bg-accent/10 text-accent"
-                        }`}
+                              ? "bg-warning/10 text-warning"
+                              : "bg-accent/10 text-accent"
+                          }`}
                       >
                         <i
-                          className={`fas ${
-                            log.triggerType === "Manual"
+                          className={`fas ${log.triggerType === "Manual"
                               ? "fa-hand-pointer"
                               : log.triggerType === "Automation"
-                              ? "fa-robot"
-                              : "fa-microchip"
-                          }`}
+                                ? "fa-robot"
+                                : "fa-microchip"
+                            }`}
                         ></i>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -272,24 +296,21 @@ export default function DashboardContent({
                       <button
                         key={id}
                         onClick={() => toggleDevice(id)}
-                        className={`p-3 rounded-xl border text-center transition-all ${
-                          isOn
+                        className={`p-3 rounded-xl border text-center transition-all ${isOn
                             ? "bg-accent/10 border-accent/30"
                             : "bg-surface border-border"
-                        }`}
+                          }`}
                       >
                         <i
-                          className={`fas ${dev.icon} text-lg ${
-                            isOn ? "text-accent" : "text-txt-muted"
-                          }`}
+                          className={`fas ${dev.icon} text-lg ${isOn ? "text-accent" : "text-txt-muted"
+                            }`}
                         ></i>
                         <div className="text-xs font-medium mt-1 truncate">
                           {dev.name}
                         </div>
                         <div
-                          className={`text-[10px] mt-0.5 font-bold ${
-                            isOn ? "text-success" : "text-txt-muted"
-                          }`}
+                          className={`text-[10px] mt-0.5 font-bold ${isOn ? "text-success" : "text-txt-muted"
+                            }`}
                         >
                           {isOn ? "ON" : "OFF"}
                         </div>
