@@ -230,11 +230,11 @@ export default function CameraContent({ cvState, settings }: Props) {
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Luminance Floor</label>
-                     <input type="number" step="0.1" value={config.darkThreshold} onChange={(e) => setConfig({ ...config, darkThreshold: Number(e.target.value) })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                     <input type="number" step="0.1" value={config.darkThreshold} onChange={(e) => setConfig({ ...config, darkThreshold: Number(e.target.value) })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Luminance Ceiling</label>
-                     <input type="number" step="0.1" value={config.brightThreshold} onChange={(e) => setConfig({ ...config, brightThreshold: Number(e.target.value) })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                     <input type="number" step="0.1" value={config.brightThreshold} onChange={(e) => setConfig({ ...config, brightThreshold: Number(e.target.value) })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                   </div>
                </div>
 

@@ -258,14 +258,14 @@ export default function AutomationContent({ rules: initialRules, schedules: init
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Trigger Signal</label>
-                     <select value={form.sensor_id} onChange={(e) => setForm({ ...form, sensor_id: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold appearance-none cursor-pointer">
+                     <select value={form.sensor_id} onChange={(e) => setForm({ ...form, sensor_id: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold appearance-none cursor-pointer">
                         <option value="" className="bg-bg uppercase">Manual Trigger</option>
                         {sensors.map((s) => <option key={s.id} value={s.id} className="bg-bg">{s.name.toUpperCase()}</option>)}
                      </select>
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Target Node</label>
-                     <select value={form.device_id} onChange={(e) => setForm({ ...form, device_id: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold appearance-none cursor-pointer">
+                     <select value={form.device_id} onChange={(e) => setForm({ ...form, device_id: e.target.value })} className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold appearance-none cursor-pointer">
                         <option value="" className="bg-bg uppercase">Select Node</option>
                         {devices.map((d) => <option key={d.id} value={d.id} className="bg-bg">{d.name.toUpperCase()}</option>)}
                      </select>
@@ -275,7 +275,7 @@ export default function AutomationContent({ rules: initialRules, schedules: init
                <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Logic Op</label>
-                     <select value={form.condition_type} onChange={(e) => setForm({ ...form, condition_type: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold appearance-none cursor-pointer">
+                     <select value={form.condition_type} onChange={(e) => setForm({ ...form, condition_type: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold appearance-none cursor-pointer">
                         <option value="gt">INCR &gt;</option>
                         <option value="lt">DECR &lt;</option>
                         <option value="between">RANGE</option>
@@ -287,7 +287,7 @@ export default function AutomationContent({ rules: initialRules, schedules: init
                   </div>
                   <div className="space-y-2">
                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Desired State</label>
-                     <select value={form.action} onChange={(e) => setForm({ ...form, action: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold appearance-none cursor-pointer">
+                     <select value={form.action} onChange={(e) => setForm({ ...form, action: e.target.value })} className="w-full px-4 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold appearance-none cursor-pointer">
                         <option value="on">ACTIVE</option>
                         <option value="off">PASSIVE</option>
                      </select>

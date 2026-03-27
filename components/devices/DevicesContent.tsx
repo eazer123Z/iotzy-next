@@ -102,7 +102,7 @@ export default function DevicesContent({
                 placeholder="Find node..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-6 py-3 rounded-2xl bg-surface border border-border focus:border-accent/40 focus:outline-none focus:shadow-sm transition-all text-xs font-bold w-full md:w-64"
+                className="pl-10 pr-6 py-3 rounded-2xl bg-surface border border-border focus:border-accent focus:outline-none focus:shadow-sm transition-all text-xs font-bold w-full md:w-64"
               />
            </div>
            <button
@@ -230,7 +230,7 @@ export default function DevicesContent({
                     placeholder="e.g. Master Living Light"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold"
                   />
                </div>
 

@@ -149,7 +149,7 @@ export default function ChatFAB() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              className="w-full pl-5 pr-12 py-3.5 rounded-xl bg-bg border border-border text-xs font-bold placeholder:text-text-muted/50 focus:outline-none focus:border-accent/40 transition-all"
+              className="w-full pl-5 pr-12 py-3.5 rounded-xl bg-bg border border-border text-xs font-bold placeholder:text-text-muted/50 focus:outline-none focus:border-accent transition-all"
             />
             <button
               onClick={send}

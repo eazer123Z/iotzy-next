@@ -155,11 +155,11 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Display Name</label>
-                       <input value={profile.fullName} onChange={(e) => setProfile({ ...profile, fullName: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                       <input value={profile.fullName} onChange={(e) => setProfile({ ...profile, fullName: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Alert Endpoint (Email)</label>
-                       <input value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold" />
+                       <input value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                     </div>
                   </div>
                   <button 
@@ -177,12 +177,12 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   <div className="space-y-6">
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Broker Address</label>
-                       <input value={mqtt.broker} onChange={(e) => setMqtt({ ...mqtt, broker: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input value={mqtt.broker} onChange={(e) => setMqtt({ ...mqtt, broker: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
                          <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Port</label>
-                         <input type="number" value={mqtt.port} onChange={(e) => setMqtt({ ...mqtt, port: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                         <input type="number" value={mqtt.port} onChange={(e) => setMqtt({ ...mqtt, port: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                       </div>
                       <div className="space-y-2">
                          <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Security</label>
@@ -193,11 +193,11 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Auth Subject</label>
-                       <input value={mqtt.username} onChange={(e) => setMqtt({ ...mqtt, username: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input value={mqtt.username} onChange={(e) => setMqtt({ ...mqtt, username: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Socket Sub-Path</label>
-                       <input value={mqtt.path} onChange={(e) => setMqtt({ ...mqtt, path: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input value={mqtt.path} onChange={(e) => setMqtt({ ...mqtt, path: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                   </div>
                   <button onClick={() => save({ mqtt_broker: mqtt.broker, mqtt_port: mqtt.port, mqtt_use_ssl: mqtt.ssl, mqtt_username: mqtt.username, mqtt_path: mqtt.path })} disabled={saving} className="w-full py-4 rounded-2xl bg-accent text-bg text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-[1.02] transition-all disabled:opacity-50">
@@ -219,7 +219,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Chat Identifier</label>
-                    <input value={tg.chatId} onChange={(e) => setTg({ chatId: e.target.value })} placeholder="Ex: 582910XX" className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono font-bold" />
+                    <input value={tg.chatId} onChange={(e) => setTg({ chatId: e.target.value })} placeholder="Ex: 582910XX" className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono font-bold" />
                     <p className="text-[9px] font-black text-text-muted uppercase tracking-[1px] mt-4 opacity-40">Send /start to the official bot to retrieve your ID.</p>
                   </div>
                   <button onClick={() => save({ telegram_chat_id: tg.chatId })} disabled={saving} className="w-full py-4 rounded-2xl bg-accent text-bg text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-[1.02] transition-all disabled:opacity-50">
@@ -248,11 +248,11 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.onLabel}</span>
-                            <input type="number" step="0.1" value={(auto as any)[item.onField]} onChange={(e) => setAuto({ ...auto, [item.onField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent/40 focus:outline-none" />
+                            <input type="number" step="0.1" value={(auto as any)[item.onField]} onChange={(e) => setAuto({ ...auto, [item.onField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                           </div>
                           <div className="space-y-2">
                             <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.offLabel}</span>
-                            <input type="number" step="0.1" value={(auto as any)[item.offField]} onChange={(e) => setAuto({ ...auto, [item.offField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent/40 focus:outline-none" />
+                            <input type="number" step="0.1" value={(auto as any)[item.offField]} onChange={(e) => setAuto({ ...auto, [item.offField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                           </div>
                         </div>
                       )}
@@ -260,7 +260,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                       {item.delayField && (
                         <div className="space-y-2">
                           <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.delayLabel}</span>
-                          <input type="number" value={(auto as any)[item.delayField]} onChange={(e) => setAuto({ ...auto, [item.delayField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent/40 focus:outline-none" />
+                          <input type="number" value={(auto as any)[item.delayField]} onChange={(e) => setAuto({ ...auto, [item.delayField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                         </div>
                       )}
                     </div>
@@ -284,11 +284,11 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Lux Floor</label>
-                        <input type="number" step="0.1" value={cv.dark} onChange={(e) => setCv({ ...cv, dark: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent/40 focus:outline-none" />
+                        <input type="number" step="0.1" value={cv.dark} onChange={(e) => setCv({ ...cv, dark: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                       </div>
                       <div className="space-y-2">
                         <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Lux Ceiling</label>
-                        <input type="number" step="0.1" value={cv.bright} onChange={(e) => setCv({ ...cv, bright: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent/40 focus:outline-none" />
+                        <input type="number" step="0.1" value={cv.bright} onChange={(e) => setCv({ ...cv, bright: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -328,15 +328,15 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   <div className="space-y-6">
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Current Key</label>
-                       <input type="password" value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input type="password" value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">New Deployment Key</label>
-                       <input type="password" value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input type="password" value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Confirm New Key</label>
-                       <input type="password" value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono" />
+                       <input type="password" value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                   </div>
                   <button onClick={changePassword} className="w-full py-4 rounded-2xl bg-danger text-white font-black text-[10px] uppercase tracking-widest shadow-sm hover:bg-danger/90 transition-all">

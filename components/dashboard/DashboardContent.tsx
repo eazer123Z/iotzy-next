@@ -155,7 +155,7 @@ export default function DashboardContent({
             <div className="h-[200px] w-full flex items-end justify-between gap-1 group/bars">
                {[40, 60, 45, 90, 65, 55, 80, 70, 40, 50, 85, 95, 75, 60, 45, 30, 55, 65, 80, 90, 50].map((h, i) => (
                  <div key={i} className="flex-1 bg-border/20 rounded-t-lg transition-all duration-500 hover:bg-accent/20 relative group/bar" style={{ height: `${h}%` }}>
-                    <div className="absolute inset-x-0 bottom-0 bg-accent/40 rounded-t-lg transition-all duration-500 group-hover/bar:bg-accent" style={{ height: '40%' }} />
+                    <div className="absolute inset-x-0 bottom-0 bg-accent-glow rounded-t-lg transition-all duration-500 group-hover/bar:bg-accent" style={{ height: '40%' }} />
                  </div>
                ))}
             </div>
@@ -256,7 +256,7 @@ export default function DashboardContent({
                        <div className="flex flex-col items-center">
                           <div className={clsx(
                              "w-8 h-8 rounded-xl flex items-center justify-center text-[10px] border transition-all duration-300",
-                             log.logType === 'error' ? "bg-danger-bg border-danger/20 text-danger" : "bg-bg-2 border-border/50 text-text-muted group-hover:text-accent group-hover:border-accent/40"
+                             log.logType === 'error' ? "bg-danger-bg border-danger/20 text-danger" : "bg-bg-2 border-border/50 text-text-muted group-hover:text-accent group-hover:border-accent/20"
                           )}>
                              <i className={`fas ${log.triggerType === 'Manual' ? 'fa-user' : 'fa-robot'}`}></i>
                           </div>

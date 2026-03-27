@@ -78,7 +78,7 @@ export default function SensorsContent({
                 placeholder="Lookup signal..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-6 py-3 rounded-2xl bg-surface border border-border focus:border-accent/40 focus:outline-none focus:shadow-sm transition-all text-xs font-bold w-full md:w-64"
+                className="pl-10 pr-6 py-3 rounded-2xl bg-surface border border-border focus:border-accent shadow-sm transition-all text-xs font-bold w-full md:w-64"
               />
            </div>
            <button
@@ -207,7 +207,7 @@ export default function SensorsContent({
                     placeholder="e.g. Server Room Thermal"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold"
                   />
                </div>
 
@@ -217,7 +217,7 @@ export default function SensorsContent({
                      <select 
                        value={form.type} 
                        onChange={(e) => setForm({ ...form, type: e.target.value })} 
-                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold appearance-none cursor-pointer"
+                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold appearance-none cursor-pointer"
                      >
                        {Object.keys(SENSOR_META).map((t) => (
                          <option key={t} value={t} className="bg-bg text-heading">{t.replace("_", " ").toUpperCase()}</option>
@@ -231,7 +231,7 @@ export default function SensorsContent({
                        placeholder="e.g. °C, %"
                        value={form.unit}
                        onChange={(e) => setForm({ ...form, unit: e.target.value })}
-                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-bold"
+                       className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold"
                      />
                   </div>
                </div>
@@ -243,7 +243,7 @@ export default function SensorsContent({
                     placeholder="iotzy/sensors/therm_01"
                     value={form.topic}
                     onChange={(e) => setForm({ ...form, topic: e.target.value })}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent/40 focus:outline-none text-xs font-mono"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono"
                   />
                </div>
             </div>

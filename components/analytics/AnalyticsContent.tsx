@@ -59,7 +59,7 @@ export default function AnalyticsContent({ logs: initialLogs, stats }: Props) {
         
         <button
           onClick={exportCSV}
-          className="px-6 py-3 rounded-2xl bg-bg-2 border border-border text-text-secondary font-black text-[10px] uppercase tracking-widest hover:border-accent/40 hover:text-accent transition-all flex items-center gap-3 shadow-sm"
+          className="px-6 py-3 rounded-2xl bg-bg-2 border border-border text-text-secondary font-black text-[10px] uppercase tracking-widest hover:border-accent hover:text-accent shadow-sm transition-all flex items-center gap-3 shadow-sm"
         >
           <i className="fas fa-file-export text-xs"></i>
           <span>Export Database</span>
@@ -117,7 +117,7 @@ export default function AnalyticsContent({ logs: initialLogs, stats }: Props) {
                 placeholder="Query activity logs..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-bold focus:outline-none focus:border-accent/40 shadow-sm transition-all placeholder:text-text-muted/40"
+                className="w-full pl-12 pr-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-bold focus:outline-none focus:border-accent shadow-sm transition-all placeholder:text-text-muted/40"
               />
            </div>
         </div>
