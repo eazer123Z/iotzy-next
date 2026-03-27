@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import BottomNav from "@/components/layout/BottomNav";
@@ -32,12 +33,13 @@ export default function DashboardLayoutClient({
   user,
   settings,
 }: DashboardLayoutClientProps) {
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Real-time polling
   usePolling();
 
-  // MQTT connection
+  // MQTT
   const mqttConfig = settings.mqttBroker
     ? {
         broker: settings.mqttBroker,
@@ -47,11 +49,9 @@ export default function DashboardLayoutClient({
         username: settings.mqttUsername || undefined,
       }
     : null;
-
   const { connected: mqttConnected } = useMQTT(mqttConfig);
-
-  // Sync MQTT connection status to store
   const setMqttConnected = useAppStore((s) => s.setMqttConnected);
+
   useEffect(() => {
     setMqttConnected(mqttConnected);
   }, [mqttConnected, setMqttConnected]);
@@ -59,19 +59,27 @@ export default function DashboardLayoutClient({
   // Close sidebar on route change (mobile)
   useEffect(() => {
     setSidebarOpen(false);
-  }, [typeof window !== "undefined" ? window.location.pathname : ""]);
+  }, [pathname]);
 
   return (
     <div className={user.theme === "light" ? "" : "dark"}>
-      {/* Mobile sidebar overlay */}
+      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <div className={`fixed left-0 top-0 h-full z-40 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+      {/* Sidebar — desktop: fixed, mobile: slide in/out */}
+      <div
+        className={`
+          fixed top-0 left-0 h-full z-50
+          transition-transform duration-300 ease-out
+          lg:translate-x-0
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
         <Sidebar user={user} settings={settings} />
       </div>
 
@@ -81,7 +89,7 @@ export default function DashboardLayoutClient({
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <main className="ml-0 lg:ml-sidebar mt-topbar min-h-[calc(100vh-var(--topbar-h))] p-4 lg:p-6 pb-20 lg:pb-6">
+      <main className="ml-0 lg:ml-[var(--sidebar-w)] mt-[var(--topbar-h)] min-h-screen p-4 lg:p-6 pb-24 lg:pb-6">
         {children}
       </main>
 

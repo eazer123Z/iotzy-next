@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import AnalyticsContent from "@/components/analytics/AnalyticsContent";
+export const dynamic = "force-dynamic";
+
 
 export default async function AnalyticsPage() {
   const user = await getSession();

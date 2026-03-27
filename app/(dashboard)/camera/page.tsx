@@ -2,6 +2,8 @@ import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import CameraContent from "@/components/camera/CameraContent";
+export const dynamic = "force-dynamic";
+
 
 export default async function CameraPage() {
   const user = await getSession();

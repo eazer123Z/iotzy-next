@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import DashboardContent from "@/components/dashboard/DashboardContent";
+export const dynamic = "force-dynamic";
+
 
 export default async function DashboardPage() {
   const user = await getSession();

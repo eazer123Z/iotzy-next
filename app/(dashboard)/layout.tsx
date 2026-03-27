@@ -2,6 +2,8 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import DashboardLayoutClient from "@/components/layout/DashboardLayoutClient";
+export const dynamic = "force-dynamic";
+
 
 export default async function DashboardLayout({
   children,

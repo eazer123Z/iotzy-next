@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import DevicesContent from "@/components/devices/DevicesContent";
+export const dynamic = "force-dynamic";
+
 
 export default async function DevicesPage() {
   const user = await getSession();

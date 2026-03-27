@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SettingsContent from "@/components/settings/SettingsContent";
+export const dynamic = "force-dynamic";
+
 
 export default async function SettingsPage() {
   const user = await getSession();
