@@ -21,6 +21,7 @@ export async function GET() {
 }
 
 import { SettingsUpdateSchema } from "@/lib/validators";
+import { MqttManager } from "@/lib/mqtt";
 
 export async function POST(req: Request) {
   const user = await getSession();
@@ -83,6 +84,15 @@ export async function POST(req: Request) {
       where: { userId: user.id },
       data: updateData,
     });
+
+    // Check if MQTT settings were changed to trigger a reconnect
+    const mqttKeys = ["mqttBroker", "mqttPort", "mqttUseSsl", "mqttUsername", "mqttClientId", "mqttPath"];
+    const needsMqttRestart = mqttKeys.some(key => key in updateData);
+    
+    if (needsMqttRestart) {
+      await MqttManager.disconnect();
+      // It will automatically reconnect on the next publish or server poll
+    }
   }
 
   return NextResponse.json({ success: true, message: "Pengaturan disimpan" });

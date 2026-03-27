@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/db";
 
 import { getSession } from "@/lib/auth";
+import { MqttManager } from "@/lib/mqtt";
 
 export async function POST(req: Request) {
   const user = await getSession();
@@ -69,6 +70,16 @@ export async function POST(req: Request) {
       triggerType: trigger || "Manual",
       logType: "info",
     },
+  });
+
+  // ==========================================
+  // 🚀 OUTBOUND MQTT PUSH KE HARDWARE (NODEMCU)
+  // ==========================================
+  const publishTopic = device.topicSub || `iotzy/${device.deviceKey}/command`;
+  await MqttManager.publish(publishTopic, {
+    deviceKey: device.deviceKey,
+    state: newState,
+    action: "set_state"
   });
 
   return NextResponse.json({ success: true, newState });
