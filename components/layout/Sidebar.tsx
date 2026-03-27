@@ -47,7 +47,7 @@ export default function Sidebar({ user, settings }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 py-8 px-4 space-y-1 overflow-y-auto scrollbar-hide">
         <div className="px-4 mb-4">
-           <span className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted opacity-40">Main Console</span>
+           <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted opacity-40">Main Console</span>
         </div>
         {navItems.map((item) => {
           const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -83,7 +83,7 @@ export default function Sidebar({ user, settings }: SidebarProps) {
                 <p className="text-xs font-black text-heading truncate uppercase tracking-tight">
                   {user.fullName || user.username}
                 </p>
-                <p className="text-[9px] font-black text-txt-muted uppercase tracking-[1px]">{user.role}</p>
+                <p className="text-[9px] font-black text-text-muted uppercase tracking-[1px]">{user.role}</p>
              </div>
           </div>
 
@@ -93,11 +93,11 @@ export default function Sidebar({ user, settings }: SidebarProps) {
                   "w-1.5 h-1.5 rounded-full",
                   mqttConnected ? "bg-success shadow-[0_0_8px_var(--success)] animate-pulse" : "bg-text-muted"
                 )} />
-                <span className="text-[9px] font-black text-txt-muted uppercase tracking-widest leading-none">
+                <span className="text-[9px] font-black text-text-muted uppercase tracking-widest leading-none">
                   {mqttConnected ? "Sync On" : "Sync Off"}
                 </span>
              </div>
-             <div style={{fontSize: '8px'}} className="font-mono text-txt-muted opacity-30 tracking-tighter truncate max-w-[100px]">
+             <div style={{fontSize: '8px'}} className="font-mono text-text-muted opacity-30 tracking-tighter truncate max-w-[100px]">
                 {settings.mqttBroker || "Local"}
              </div>
           </div>
@@ -105,7 +105,7 @@ export default function Sidebar({ user, settings }: SidebarProps) {
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-3 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-txt-muted hover:text-danger hover:bg-danger-bg transition-all active:scale-95"
+          className="w-full flex items-center justify-center gap-3 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-danger hover:bg-danger-bg transition-all active:scale-95"
         >
           <i className="fas fa-power-off"></i>
           Terminate Link

@@ -96,7 +96,7 @@ export default function DashboardContent({
         <div className="space-y-1">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-success shadow-[0_0_8px_var(--success)]" />
-            <span className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted">Node Synchronized</span>
+            <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted">Node Synchronized</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-heading tracking-tighter">
             System Overview, <span className="text-accent">{username}</span>
@@ -137,17 +137,17 @@ export default function DashboardContent({
                   </div>
                   <div>
                      <h3 className="text-xs font-black uppercase tracking-[2px] text-heading leading-none mb-1">Environmental Telemetry</h3>
-                     <span className="text-[9px] font-bold text-txt-muted uppercase tracking-widest leading-none">Real-time Data Stream</span>
+                     <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest leading-none">Real-time Data Stream</span>
                   </div>
                </div>
                <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                     <span className="text-[9px] font-black text-txt-muted uppercase">Brightness</span>
+                     <span className="text-[9px] font-black text-text-muted uppercase">Brightness</span>
                   </div>
                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-1.5 rounded-full bg-info" />
-                     <span className="text-[9px] font-black text-txt-muted uppercase">Power Load</span>
+                     <span className="text-[9px] font-black text-text-muted uppercase">Power Load</span>
                   </div>
                </div>
             </div>
@@ -159,7 +159,7 @@ export default function DashboardContent({
                  </div>
                ))}
             </div>
-            <div className="mt-6 flex justify-between items-center text-[9px] font-black text-txt-muted opacity-40 uppercase tracking-widest">
+            <div className="mt-6 flex justify-between items-center text-[9px] font-black text-text-muted opacity-40 uppercase tracking-widest">
                <span>Start Session</span>
                <div className="h-[1px] flex-1 mx-8 bg-border/20" />
                <span>Live Telemetry</span>
@@ -169,12 +169,12 @@ export default function DashboardContent({
           {/* Quick Node Controls */}
           <div className="space-y-4">
              <div className="flex items-center justify-between px-2">
-                <h3 className="text-xs font-black uppercase tracking-[2px] text-txt-muted">Quick Access Nodes</h3>
+                <h3 className="text-xs font-black uppercase tracking-[2px] text-text-muted">Quick Access Nodes</h3>
                 <Link href="/devices" className="text-[10px] font-black text-accent hover:underline uppercase tracking-widest transition-all">View All Nodes</Link>
              </div>
              <div className="node-grid">
                 {quickControls.length === 0 ? (
-                  <div className="col-span-full card p-10 text-center text-[10px] font-bold text-txt-muted uppercase italic tracking-widest">No nodes found in quick access dashboard.</div>
+                  <div className="col-span-full card p-10 text-center text-[10px] font-bold text-text-muted uppercase italic tracking-widest">No nodes found in quick access dashboard.</div>
                 ) : (
                   quickControls.map((id) => {
                     const dev = initialDevices.find((d) => String(d.id) === id);
@@ -183,17 +183,17 @@ export default function DashboardContent({
                     return (
                       <div key={id} className="node-card hover:bg-surface-hover transition-all group">
                          <div className="flex items-center justify-between pointer-events-none">
-                            <div className="node-icon text-txt-muted group-hover:text-accent">
+                            <div className="node-icon text-text-muted group-hover:text-accent">
                                <i className={`fas ${dev.icon}`}></i>
                             </div>
                             <div className={clsx("badge", isOn ? "badge-success" : "badge-info")}>{isOn ? "Active" : "Idle"}</div>
                          </div>
                          <div className="mt-2">
                             <h4 className="text-sm font-black text-heading uppercase tracking-tight truncate">{dev.name}</h4>
-                            <p className="text-[9px] font-bold text-txt-muted uppercase tracking-widest">{dev.type}</p>
+                            <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">{dev.type}</p>
                          </div>
                          <div className="mt-4 flex items-center justify-between border-t border-border/20 pt-4">
-                            <span className="text-[9px] font-black text-txt-muted uppercase tracking-widest">Manual Override</span>
+                            <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Manual Override</span>
                             <label className="toggle-wrap">
                                <input type="checkbox" checked={isOn} onChange={() => toggleDevice(id)} />
                                <span className="toggle-slider"></span>
@@ -219,20 +219,20 @@ export default function DashboardContent({
                  </div>
                  <div>
                     <h3 className="text-xs font-black uppercase tracking-widest text-heading leading-none">Neural Hub</h3>
-                    <span className="text-[9px] font-bold text-txt-muted uppercase">Sub-System Status</span>
+                    <span className="text-[9px] font-bold text-text-muted uppercase">Sub-System Status</span>
                  </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4 relative z-10">
                  <div className="p-4 rounded-2xl bg-black/10 border border-border/20">
-                    <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest block mb-1">Brightness</span>
+                    <span className="text-[8px] font-black text-text-muted uppercase tracking-widest block mb-1">Brightness</span>
                     <span className="text-xl font-black text-heading font-mono">{brightnessVal}%</span>
                     <div className="progress-rail mt-3">
                        <div className="progress-bar bg-accent" style={{ width: `${brightnessVal}%` }} />
                     </div>
                  </div>
                  <div className="p-4 rounded-2xl bg-black/10 border border-border/20">
-                    <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest block mb-1">MQTT Traffic</span>
+                    <span className="text-[8px] font-black text-text-muted uppercase tracking-widest block mb-1">MQTT Traffic</span>
                     <span className="text-xl font-black text-success font-mono">1.2kb/s</span>
                     <div className="progress-rail mt-3">
                        <div className="progress-bar bg-success" style={{ width: '65%' }} />
@@ -244,7 +244,7 @@ export default function DashboardContent({
            {/* System Logs */}
            <div className="card flex flex-col h-[520px]">
               <div className="px-6 py-5 border-b border-border/40 flex items-center justify-between">
-                 <h3 className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted opacity-40">System Journal</h3>
+                 <h3 className="text-[10px] font-black uppercase tracking-[3px] text-text-muted opacity-40">System Journal</h3>
                  <div className="flex gap-1">
                     <div className="w-1.5 h-1.5 rounded-full bg-border" />
                     <div className="w-1.5 h-1.5 rounded-full bg-border" />
@@ -256,7 +256,7 @@ export default function DashboardContent({
                        <div className="flex flex-col items-center">
                           <div className={clsx(
                              "w-8 h-8 rounded-xl flex items-center justify-center text-[10px] border transition-all duration-300",
-                             log.logType === 'error' ? "bg-danger-bg border-danger text-danger" : "bg-bg-2 border-border text-txt-muted group-hover:text-accent group-hover:border-accent"
+                             log.logType === 'error' ? "bg-danger-bg border-danger text-danger" : "bg-bg-2 border-border text-text-muted group-hover:text-accent group-hover:border-accent"
                           )}>
                              <i className={`fas ${log.triggerType === 'Manual' ? 'fa-user' : 'fa-robot'}`}></i>
                           </div>
@@ -265,14 +265,14 @@ export default function DashboardContent({
                        <div className="flex-1 min-w-0 pb-2">
                           <div className="flex justify-between items-start">
                              <h4 className="text-xs font-black text-heading uppercase tracking-tight truncate">{log.activity}</h4>
-                             <span className="text-[8px] font-mono text-txt-muted mt-1">{new Date(log.createdAt).toLocaleTimeString("en-US", { hour12: false, hour: '2-digit', minute: '2-digit' })}</span>
+                             <span className="text-[8px] font-mono text-text-muted mt-1">{new Date(log.createdAt).toLocaleTimeString("en-US", { hour12: false, hour: '2-digit', minute: '2-digit' })}</span>
                           </div>
                           <p className="text-[10px] font-semibold text-text-secondary leading-normal opacity-50 truncate">{log.deviceName} system execute.</p>
                        </div>
                     </div>
                  ))}
               </div>
-              <Link href="/analytics" className="m-4 py-3 rounded-2xl bg-bg-2 border border-border/40 text-[9px] font-black uppercase tracking-widest text-txt-muted text-center hover:bg-accent-bg hover:text-accent transition-all">Expand View Log</Link>
+              <Link href="/analytics" className="m-4 py-3 rounded-2xl bg-bg-2 border border-border/40 text-[9px] font-black uppercase tracking-widest text-text-muted text-center hover:bg-accent-bg hover:text-accent transition-all">Expand View Log</Link>
            </div>
 
         </div>
@@ -289,7 +289,7 @@ function StatCard({ icon, color, label, value, sub }: { icon: string; color: str
        </div>
        <div>
           <span className="text-[28px] font-black text-heading font-mono leading-none tracking-tighter">{value}</span>
-          <h4 className="text-[10px] font-black uppercase tracking-[2.5px] text-txt-muted mt-2 leading-none opacity-40">{label}</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-[2.5px] text-text-muted mt-2 leading-none opacity-40">{label}</h4>
           <p className="text-[9px] font-bold text-text-secondary mt-2 opacity-60 italic">{sub}</p>
        </div>
        <div className="absolute top-0 right-0 p-4 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">

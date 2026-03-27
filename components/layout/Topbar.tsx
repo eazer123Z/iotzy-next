@@ -62,7 +62,7 @@ export default function Topbar({
         </button>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted opacity-40">System</span>
+            <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted opacity-40">System</span>
             <span className="text-border">/</span>
           </div>
           <h1 className="font-black text-lg text-heading tracking-tight animate-fadeIn">{pageTitle}</h1>
@@ -76,8 +76,8 @@ export default function Topbar({
            <div className="flex items-center gap-2 group">
               <i className="fas fa-plug text-accent text-xs transition-transform group-hover:scale-125"></i>
               <div className="flex flex-col">
-                 <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest leading-none mb-1">Active Nodes</span>
-                 <span className="text-xs font-black text-heading leading-tight">{activeCount}<span className="text-txt-muted opacity-40 ml-0.5">/{deviceCount}</span></span>
+                 <span className="text-[8px] font-black text-text-muted uppercase tracking-widest leading-none mb-1">Active Nodes</span>
+                 <span className="text-xs font-black text-heading leading-tight">{activeCount}<span className="text-text-muted opacity-40 ml-0.5">/{deviceCount}</span></span>
               </div>
            </div>
            <div className="w-px h-6 bg-border/40"></div>
@@ -87,8 +87,8 @@ export default function Topbar({
                 mqttConnected ? "bg-success shadow-[0_0_8px_var(--success)] animate-pulse" : "bg-text-muted"
               )} />
               <div className="flex flex-col">
-                 <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest leading-none mb-1">Neural Sync</span>
-                 <span className={clsx("text-xs font-black leading-tight", mqttConnected ? "text-success" : "text-txt-muted")}>
+                 <span className="text-[8px] font-black text-text-muted uppercase tracking-widest leading-none mb-1">Neural Sync</span>
+                 <span className={clsx("text-xs font-black leading-tight", mqttConnected ? "text-success" : "text-text-muted")}>
                     {mqttConnected ? "ONLINE" : "OFFLINE"}
                  </span>
               </div>
@@ -99,7 +99,7 @@ export default function Topbar({
         {mounted && (
           <div className="hidden md:flex flex-col items-end px-4 border-r border-border/40">
             <span className="text-sm font-black font-mono text-heading leading-none tracking-tighter">{clock}</span>
-            <span className="text-[9px] font-black text-txt-muted tracking-[1.5px] mt-1 opacity-50 uppercase">{date}</span>
+            <span className="text-[9px] font-black text-text-muted tracking-[1.5px] mt-1 opacity-50 uppercase">{date}</span>
           </div>
         )}
 

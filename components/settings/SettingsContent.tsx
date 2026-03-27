@@ -104,7 +104,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
       <div className="px-4">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_var(--accent-glow)]" />
-          <span className="text-[10px] font-black uppercase tracking-[3px] text-txt-muted">Global Parameters</span>
+          <span className="text-[10px] font-black uppercase tracking-[3px] text-text-muted">Global Parameters</span>
         </div>
         <h1 className="text-3xl font-black text-heading tracking-tighter">System Settings</h1>
         <p className="text-text-secondary text-sm font-bold opacity-60">Control system protocols and identity configurations.</p>
@@ -133,7 +133,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                 "group flex items-center gap-4 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap text-left",
                 tab === t.key 
                   ? "bg-bg-2 text-accent shadow-sm" 
-                  : "text-txt-muted hover:text-heading"
+                  : "text-text-muted hover:text-heading"
               )}
             >
               <i className={clsx("fas", t.icon, "text-xs opacity-60", tab === t.key && "opacity-100")}></i>
@@ -150,15 +150,15 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                 <div className="space-y-8">
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Unique Identifier</label>
+                      <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Unique Identifier</label>
                       <input disabled value={user.username} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono opacity-40 cursor-not-allowed" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Display Name</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Display Name</label>
                        <input value={profile.fullName} onChange={(e) => setProfile({ ...profile, fullName: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Alert Endpoint (Email)</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Alert Endpoint (Email)</label>
                        <input value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-bold" />
                     </div>
                   </div>
@@ -176,27 +176,27 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                 <div className="space-y-8">
                   <div className="space-y-6">
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Broker Address</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Broker Address</label>
                        <input value={mqtt.broker} onChange={(e) => setMqtt({ ...mqtt, broker: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
-                         <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Port</label>
+                         <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Port</label>
                          <input type="number" value={mqtt.port} onChange={(e) => setMqtt({ ...mqtt, port: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                       </div>
                       <div className="space-y-2">
-                         <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Security</label>
-                         <button onClick={() => setMqtt({ ...mqtt, ssl: !mqtt.ssl })} className={clsx("w-full py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border", mqtt.ssl ? "bg-accent/5 border-accent/20 text-accent" : "bg-bg-2 border-border text-txt-muted opacity-60")}>
+                         <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Security</label>
+                         <button onClick={() => setMqtt({ ...mqtt, ssl: !mqtt.ssl })} className={clsx("w-full py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border", mqtt.ssl ? "bg-accent/5 border-accent/20 text-accent" : "bg-bg-2 border-border text-text-muted opacity-60")}>
                            {mqtt.ssl ? "SSL Encrypted" : "Plain / Non-SSL"}
                          </button>
                       </div>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Auth Subject</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Auth Subject</label>
                        <input value={mqtt.username} onChange={(e) => setMqtt({ ...mqtt, username: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Socket Sub-Path</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Socket Sub-Path</label>
                        <input value={mqtt.path} onChange={(e) => setMqtt({ ...mqtt, path: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                   </div>
@@ -218,9 +218,9 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                      </p>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Chat Identifier</label>
+                    <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Chat Identifier</label>
                     <input value={tg.chatId} onChange={(e) => setTg({ chatId: e.target.value })} placeholder="Ex: 582910XX" className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono font-bold" />
-                    <p className="text-[9px] font-black text-txt-muted uppercase tracking-[1px] mt-4 opacity-40">Send /start to the official bot to retrieve your ID.</p>
+                    <p className="text-[9px] font-black text-text-muted uppercase tracking-[1px] mt-4 opacity-40">Send /start to the official bot to retrieve your ID.</p>
                   </div>
                   <button onClick={() => save({ telegram_chat_id: tg.chatId })} disabled={saving} className="w-full py-4 rounded-2xl bg-accent text-bg text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-[1.02] transition-all disabled:opacity-50">
                     {saving ? "Establishing..." : "Arm Comms Hub"}
@@ -247,11 +247,11 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                       {item.onField && (
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest ml-1">{item.onLabel}</span>
+                            <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.onLabel}</span>
                             <input type="number" step="0.1" value={(auto as any)[item.onField]} onChange={(e) => setAuto({ ...auto, [item.onField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                           </div>
                           <div className="space-y-2">
-                            <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest ml-1">{item.offLabel}</span>
+                            <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.offLabel}</span>
                             <input type="number" step="0.1" value={(auto as any)[item.offField]} onChange={(e) => setAuto({ ...auto, [item.offField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                           </div>
                         </div>
@@ -259,7 +259,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                       
                       {item.delayField && (
                         <div className="space-y-2">
-                          <span className="text-[8px] font-black text-txt-muted uppercase tracking-widest ml-1">{item.delayLabel}</span>
+                          <span className="text-[8px] font-black text-text-muted uppercase tracking-widest ml-1">{item.delayLabel}</span>
                           <input type="number" value={(auto as any)[item.delayField]} onChange={(e) => setAuto({ ...auto, [item.delayField]: Number(e.target.value) })} className="w-full px-4 py-3 rounded-xl bg-bg border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                         </div>
                       )}
@@ -276,18 +276,18 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   <div className="space-y-8">
                     <div className="space-y-4">
                        <div className="flex items-center justify-between">
-                          <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">AI Inference Confidence</label>
+                          <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">AI Inference Confidence</label>
                           <span className="text-xs font-black text-accent">{Math.round(cv.confidence * 100)}%</span>
                        </div>
                        <input type="range" min="0" max="100" value={cv.confidence * 100} onChange={(e) => setCv({ ...cv, confidence: Number(e.target.value) / 100 })} className="w-full h-1.5 bg-bg-2 rounded-full appearance-none cursor-pointer accent-accent" />
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Lux Floor</label>
+                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Lux Floor</label>
                         <input type="number" step="0.1" value={cv.dark} onChange={(e) => setCv({ ...cv, dark: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Lux Ceiling</label>
+                        <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Lux Ceiling</label>
                         <input type="number" step="0.1" value={cv.bright} onChange={(e) => setCv({ ...cv, bright: Number(e.target.value) })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border text-xs font-mono font-bold focus:border-accent focus:outline-none" />
                       </div>
                     </div>
@@ -301,7 +301,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                           onClick={() => setCv({ ...cv, [item.key]: !(cv as any)[item.key] })}
                           className={clsx(
                             "p-6 rounded-3xl border transition-all flex flex-col items-center gap-3",
-                            (cv as any)[item.key] ? "bg-accent/5 border-accent/20 text-accent" : "bg-bg-2/30 border-border text-txt-muted opacity-60"
+                            (cv as any)[item.key] ? "bg-accent/5 border-accent/20 text-accent" : "bg-bg-2/30 border-border text-text-muted opacity-60"
                           )}
                         >
                           <i className={clsx("fas", item.icon, "text-lg")}></i>
@@ -327,15 +327,15 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   </div>
                   <div className="space-y-6">
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Current Key</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Current Key</label>
                        <input type="password" value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">New Deployment Key</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">New Deployment Key</label>
                        <input type="password" value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-txt-muted ml-1">Confirm New Key</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-text-muted ml-1">Confirm New Key</label>
                        <input type="password" value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-6 py-4 rounded-2xl bg-bg-2 border border-border focus:border-accent focus:outline-none text-xs font-mono" />
                     </div>
                   </div>
@@ -353,7 +353,7 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                   
                   <div className="space-y-4">
                     <h2 className="text-3xl font-black text-heading tracking-tight">IoTzy <span className="text-accent">Smooth</span></h2>
-                    <div className="px-5 py-1.5 rounded-full bg-bg-2 text-[8px] font-black text-txt-muted uppercase tracking-[3px]">Kernel Ver: 4.1.0-SMOOTH</div>
+                    <div className="px-5 py-1.5 rounded-full bg-bg-2 text-[8px] font-black text-text-muted uppercase tracking-[3px]">Kernel Ver: 4.1.0-SMOOTH</div>
                     <p className="text-xs font-bold text-text-secondary opacity-60">High-Performance Neural IoT Command Core</p>
                   </div>
 
@@ -365,13 +365,13 @@ export default function SettingsContent({ user, settings, templates }: Props) {
                       { label: "Protocol", val: "MQTT 5.0 Core" },
                     ].map(st => (
                       <div key={st.label} className="p-4 rounded-2xl bg-bg-2/30 border border-bg-2">
-                        <div className="text-[7px] font-black text-txt-muted uppercase tracking-[2px] mb-1">{st.label}</div>
+                        <div className="text-[7px] font-black text-text-muted uppercase tracking-[2px] mb-1">{st.label}</div>
                         <div className="text-[10px] font-black text-heading uppercase tracking-widest">{st.val}</div>
                       </div>
                     ))}
                   </div>
 
-                  <p className="text-[8px] font-black text-txt-muted/30 uppercase tracking-[2px] pt-8">
+                  <p className="text-[8px] font-black text-text-muted/30 uppercase tracking-[2px] pt-8">
                     DeepMind Agentic Systems :: (C) 2026 :: All Nodes Operational
                   </p>
                 </div>

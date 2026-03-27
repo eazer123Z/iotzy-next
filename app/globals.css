@@ -84,7 +84,7 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: 
+  background-image:
     radial-gradient(circle at 0% 0%, var(--accent-bg) 0%, transparent 40%),
     radial-gradient(circle at 100% 100%, var(--danger-bg) 0%, transparent 40%);
   opacity: 0.4;
@@ -95,39 +95,67 @@ body::before {
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
 
 /* ── Animations ── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInX {
-  from { opacity: 0; transform: translateX(-15px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(0.98); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
 .animate-slideIn {
   animation: slideInX 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
 .animate-pulse-light {
   animation: pulse-subtle 3s infinite ease-in-out;
 }
@@ -152,6 +180,7 @@ body::before {
 .text-label {
   @apply text-[8px] font-black uppercase tracking-[2px] text-text-muted;
 }
+
 .text-value {
   @apply font-mono font-black tracking-tighter text-heading;
 }
@@ -159,28 +188,23 @@ body::before {
 /* ── Buttons (Smooth & Light) ── */
 @layer components {
   .btn-base {
-    @apply flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-black text-[10px] 
-           uppercase tracking-widest transition-all duration-300 active:scale-95 disabled:opacity-50;
+    @apply flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 active:scale-95 disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply btn-base bg-accent text-bg shadow-[0_5px_15px_var(--accent-glow)] 
-           hover:shadow-[0_8px_25px_var(--accent-glow)] hover:-translate-y-0.5;
+    @apply btn-base bg-accent text-bg shadow-[0_5px_15px_var(--accent-glow)] hover:shadow-[0_8px_25px_var(--accent-glow)] hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-    @apply btn-base bg-surface-solid border border-border text-text-secondary 
-           hover:border-accent hover:text-accent hover:bg-accent-bg;
+    @apply btn-base bg-surface-solid border border-border text-text-secondary hover:border-accent hover:text-accent hover:bg-accent-bg;
   }
 
   .btn-danger {
-    @apply btn-base bg-danger text-white shadow-[0_5px_15px_var(--danger-bg)] 
-           hover:shadow-[0_8px_25px_var(--danger-bg)] hover:-translate-y-0.5;
+    @apply btn-base bg-danger text-white shadow-[0_5px_15px_var(--danger-bg)] hover:shadow-[0_8px_25px_var(--danger-bg)] hover:-translate-y-0.5;
   }
 
   .btn-ghost {
-    @apply flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-text-muted
-           hover:bg-accent-bg hover:text-accent transition-all duration-200;
+    @apply flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-text-muted hover:bg-accent-bg hover:text-accent transition-all duration-200;
   }
 
   .card {
@@ -188,21 +212,28 @@ body::before {
   }
 
   .input-field {
-    @apply w-full px-5 py-3.5 rounded-2xl text-sm font-semibold
-           bg-bg opacity-80 border border-border
-           outline-none transition-all duration-300
-           focus:border-accent focus:bg-surface-solid focus:opacity-100
-           placeholder:text-text-muted;
+    @apply w-full px-5 py-3.5 rounded-2xl text-sm font-semibold bg-bg opacity-80 border border-border outline-none transition-all duration-300 focus:border-accent focus:bg-surface-solid focus:opacity-100 placeholder:text-text-muted;
   }
 
   .badge {
     @apply inline-flex items-center px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-[1px];
   }
 
-  .badge-success { @apply badge bg-success-bg text-success border-success; }
-  .badge-warning { @apply badge bg-warning-bg text-warning border-warning; }
-  .badge-danger  { @apply badge bg-danger-bg text-danger border-danger; }
-  .badge-info    { @apply badge bg-info-bg text-info border-info; }
+  .badge-success {
+    @apply badge bg-success-bg text-success border-success;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-bg text-warning border-warning;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger-bg text-danger border-danger;
+  }
+
+  .badge-info {
+    @apply badge bg-info-bg text-info border-info;
+  }
 }
 
 /* ── Custom Inputs ── */
@@ -213,6 +244,7 @@ input[type="range"] {
   border-radius: 2px;
   outline: none;
 }
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px;
@@ -223,6 +255,7 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0 0 10px var(--accent-glow);
   transition: var(--transition);
 }
+
 input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
@@ -234,44 +267,72 @@ input[type="range"]::-webkit-slider-thumb:hover {
   width: 44px;
   height: 24px;
 }
-.toggle-wrap input { opacity: 0; width: 0; height: 0; }
+
+.toggle-wrap input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
 .toggle-slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: var(--border);
   transition: .4s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 24px;
 }
+
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 18px; width: 18px;
-  left: 3px; bottom: 3px;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
   background-color: #fff;
   transition: .4s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-input:checked + .toggle-slider { background-color: var(--accent); }
-input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+input:checked+.toggle-slider {
+  background-color: var(--accent);
+}
+
+input:checked+.toggle-slider:before {
+  transform: translateX(20px);
+}
 
 /* ── Loading Screen ── */
 .loading-screen {
   position: fixed;
-  inset: 0; z-index: 999;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background: var(--bg);
 }
+
 .loading-spinner {
-  width: 40px; height: 40px;
+  width: 40px;
+  height: 40px;
   border: 3px solid var(--border);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ── Device Logic Grid (Lightweight) ── */
 .node-grid {
@@ -291,13 +352,14 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
 }
 
 .node-card:hover .node-icon {
-  @apply bg-accent-bg text-accent border-accent/20;
+  @apply bg-accent-bg text-accent border-accent;
 }
 
 /* ── Progress Indicators (Smooth) ── */
 .progress-rail {
   @apply w-full h-1.5 bg-border rounded-full overflow-hidden relative;
 }
+
 .progress-bar {
   @apply h-full bg-accent transition-all duration-1000;
   box-shadow: 0 0 10px var(--accent-glow);
@@ -307,20 +369,25 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
 .data-table-wrap {
   @apply w-full overflow-hidden card;
 }
+
 .data-table {
   @apply w-full text-left;
 }
+
 .data-table th {
-  @apply px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-text-muted border-b border-border/10 bg-black/5;
+  @apply px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-text-muted border-b border-border bg-bg-2;
 }
+
 .data-table td {
-  @apply px-6 py-4 text-xs font-semibold text-text border-b border-border/5;
+  @apply px-6 py-4 text-xs font-semibold text-text border-b border-border;
 }
+
 .data-table tr:last-child td {
   @apply border-b-0;
 }
+
 .data-table tr:hover {
-  @apply bg-accent-bg/50;
+  @apply bg-accent-bg;
 }
 
 /* ── Chart & Sparkline placeholders ── */
