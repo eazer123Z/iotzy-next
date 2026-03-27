@@ -64,15 +64,7 @@ export async function getSession(): Promise<SessionUser | null> {
   const session = await prisma.session.findUnique({
     where: { sessionToken: token, expiresAt: { gt: new Date() } },
     include: {
-      user: {
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          fullName: true,
-          role: true,
-        },
-      },
+      user: true,
     },
   });
 
@@ -82,15 +74,17 @@ export async function getSession(): Promise<SessionUser | null> {
   }
 
   // SESSION ROTATION LOGIC:
-  // Jika umur session sudah lebih dari 12 jam, rotasi tokennya 
-  const ageInHours = (Date.now() - session.createdAt.getTime()) / 3600000;
-  if (ageInHours > 12) {
+  // Jika sisa waktu session kurang dari 12 jam, perpanjang otomatis (sliding)
+  const remainingMs = session.expiresAt.getTime() - Date.now();
+  const twelveHoursMs = 12 * 3600 * 1000;
+
+  if (remainingMs < twelveHoursMs) {
     const newToken = nanoid(64);
     const newExpiresAt = new Date(Date.now() + 86400 * 1000); // prolong 24h
-    
+
     await prisma.session.update({
       where: { id: session.id },
-      data: { sessionToken: newToken, expiresAt: newExpiresAt, createdAt: new Date() }
+      data: { sessionToken: newToken, expiresAt: newExpiresAt },
     });
 
     cookies().set("iotzy_session", newToken, {
@@ -111,6 +105,7 @@ export async function getSession(): Promise<SessionUser | null> {
     theme: "dark",
   };
 }
+
 
 export async function destroySession(): Promise<void> {
   const token = cookies().get("iotzy_session")?.value;
