@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 // This endpoint is called by Telegram webhook
 export async function POST(req: Request) {
   // Verify webhook token
