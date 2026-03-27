@@ -128,7 +128,7 @@ export default function DevicesContent({
               key={dev.id}
               className={clsx(
                 "card p-6 flex flex-col gap-6 relative overflow-hidden transition-all group",
-                isOn ? "border-accent/30 bg-accent/5" : "hover:border-accent/20"
+                isOn ? "border-accent bg-accent-bg" : "hover:border-accent"
               )}
             >
               {/* Header Info */}

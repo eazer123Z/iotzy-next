@@ -38,7 +38,7 @@ export default function AnalyticsContent({ logs: initialLogs, stats }: Props) {
   }
 
   const typeConfig: Record<string, { label: string; icon: string; class: string }> = {
-    info: { label: "Information", icon: "fa-info-circle", class: "text-accent bg-accent/5 border-accent/20" },
+    info: { label: "Information", icon: "fa-info-circle", class: "text-accent bg-accent-bg border-accent" },
     success: { label: "Success", icon: "fa-check-circle", class: "text-success bg-success-bg border-success" },
     warning: { label: "Warning", icon: "fa-exclamation-triangle", class: "text-warning bg-warning-bg border-warning" },
     error: { label: "Failure", icon: "fa-times-circle", class: "text-danger bg-danger-bg border-danger" },

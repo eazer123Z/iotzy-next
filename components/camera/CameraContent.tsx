@@ -97,7 +97,7 @@ export default function CameraContent({ cvState, settings }: Props) {
             onClick={cv.detecting ? handleStop : handleStart}
             className={clsx(
               "px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center gap-2",
-              cv.detecting ? "bg-bg-2 text-danger border border-danger/20" : "bg-accent text-bg"
+              cv.detecting ? "bg-bg-2 text-danger border border-danger" : "bg-accent text-bg"
             )}
           >
             <i className={clsx("fas", cv.detecting ? "fa-power-off" : "fa-play")}></i>
@@ -123,7 +123,7 @@ export default function CameraContent({ cvState, settings }: Props) {
                        </div>
                     </div>
                     {cv.detecting && (
-                       <div className="px-4 py-2 rounded-xl bg-accent/10 backdrop-blur-md border border-accent/20 text-accent flex items-center gap-4">
+                       <div className="px-4 py-2 rounded-xl bg-accent-bg backdrop-blur-md border border-accent text-accent flex items-center gap-4">
                           <div className="text-right">
                              <p className="text-[8px] font-black uppercase tracking-widest opacity-60">Identification</p>
                              <p className="text-sm font-black tracking-tight">{cv.personCount} ENTITIES</p>
@@ -249,7 +249,7 @@ export default function CameraContent({ cvState, settings }: Props) {
                       onClick={() => setConfig({ ...config, [item.key]: !(config as any)[item.key] })}
                       className={clsx(
                         "flex flex-col items-center gap-4 p-6 rounded-2xl border transition-all",
-                        (config as any)[item.key] ? "bg-accent/5 border-accent/20 text-accent" : "bg-bg-2 border-border text-text-muted"
+                        (config as any)[item.key] ? "bg-accent-bg border-accent text-accent" : "bg-bg-2 border-border text-text-muted"
                       )}
                     >
                       <i className={clsx("fas", item.icon, "text-xl opacity-60")}></i>

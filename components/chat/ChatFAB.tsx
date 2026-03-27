@@ -141,7 +141,7 @@ export default function ChatFAB() {
         </div>
 
         {/* Footer Input */}
-        <div className="p-5 border-t border-border bg-bg-2/20">
+        <div className="p-5 border-t border-border bg-bg-2">
           <div className="relative">
             <input
               type="text"

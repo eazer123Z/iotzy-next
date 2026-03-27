@@ -128,7 +128,7 @@ export default function AutomationContent({ rules: initialRules, schedules: init
               return (
                 <div key={rule.id} className={clsx(
                   "card p-6 flex flex-col gap-6 relative group overflow-hidden transition-all",
-                  rule.isEnabled ? "border-accent/20 bg-accent/5" : "opacity-60 grayscale"
+                  rule.isEnabled ? "border-accent bg-accent-bg" : "opacity-60 grayscale"
                 )}>
                   {/* Card Header */}
                   <div className="flex items-center justify-between relative z-10">
