@@ -191,7 +191,7 @@ body::before {
     @apply w-full px-5 py-3.5 rounded-2xl text-sm font-semibold
            bg-bg opacity-80 border border-border
            outline-none transition-all duration-300
-           focus:border-accent/40 focus:bg-surface-solid focus:opacity-100
+           focus:border-accent focus:bg-surface-solid focus:opacity-100
            placeholder:text-text-muted/50;
   }
 
@@ -291,9 +291,7 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
 }
 
 .node-card:hover .node-icon {
-  background: var(--accent-bg);
-  color: var(--accent);
-  border-color: var(--accent/30);
+  @apply bg-accent-bg text-accent border-accent/20;
 }
 
 /* ── Progress Indicators (Smooth) ── */
@@ -322,7 +320,7 @@ input:checked + .toggle-slider:before { transform: translateX(20px); }
   @apply border-b-0;
 }
 .data-table tr:hover {
-  @apply bg-accent-[0.02];
+  @apply bg-accent-bg/50;
 }
 
 /* ── Chart & Sparkline placeholders ── */
