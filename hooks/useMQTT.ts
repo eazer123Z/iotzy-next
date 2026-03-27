@@ -59,7 +59,9 @@ export function useMQTT(config: MqttConfig | null) {
         // Dynamic import mqtt.js
         const mqtt = await import("mqtt");
 
-        const protocol = config!.ssl ? "wss" : "ws";
+        // Force WSS if on HTTPS, otherwise use config
+        const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+        const protocol = (config!.ssl || isHttps) ? "wss" : "ws";
         const url = `${protocol}://${config!.broker}:${config!.port}${config!.path || "/mqtt"}`;
 
         mqttClient = mqtt.default.connect(url, {

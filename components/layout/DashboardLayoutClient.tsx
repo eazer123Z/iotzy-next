@@ -45,7 +45,8 @@ export default function DashboardLayoutClient({
         broker: settings.mqttBroker,
         port: settings.mqttPort || 8884,
         path: settings.mqttPath || "/mqtt",
-        ssl: settings.mqttUseSsl ?? true,
+        // Default to SSL if port is 8884 or explicitly set to true
+        ssl: settings.mqttUseSsl ?? (settings.mqttPort === 8884 || !settings.mqttPort),
         username: settings.mqttUsername || undefined,
       }
     : null;

@@ -42,8 +42,11 @@ export default function DashboardContent({
   } = useAppStore();
   const [clock, setClock] = useState("--:--:--");
 
+  const [mounted, setMounted] = useState(false);
+
   // Hydrate store
   useEffect(() => {
+    setMounted(true);
     setDevices(initialDevices);
     setSensors(initialSensors);
     if (cvState) setCv(cvState);
@@ -133,13 +136,13 @@ export default function DashboardContent({
         </div>
         <div className="text-right">
           <div className="font-mono text-lg font-bold text-heading">{clock}</div>
-          <div className="text-[10px] text-txt-muted">
-            {new Date().toLocaleDateString("id-ID", {
+          <div className="text-[10px] text-txt-muted uppercase tracking-wider">
+            {mounted ? new Date().toLocaleDateString("id-ID", {
               weekday: "long",
               day: "numeric",
               month: "long",
               year: "numeric",
-            })}
+            }) : "—"}
           </div>
         </div>
       </div>
@@ -254,7 +257,7 @@ export default function DashboardContent({
                           {log.deviceName} — {log.activity}
                         </div>
                         <div className="text-[11px] text-txt-muted">
-                          {new Date(log.createdAt).toLocaleTimeString("id-ID")} •{" "}
+                          {mounted ? new Date(log.createdAt).toLocaleTimeString("id-ID") : "--:--"} •{" "}
                           {log.triggerType}
                         </div>
                       </div>
