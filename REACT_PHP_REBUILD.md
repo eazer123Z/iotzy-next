@@ -1,24 +1,24 @@
 # Rebuild: React + PHP Native
 
-Sesuai permintaan, baseline baru disiapkan dengan stack:
+Sesuai permintaan, struktur project sekarang disusun lebih clean:
 
-- `frontend-react/` → React + Vite
-- `backend-php/` → PHP native (router sederhana) + PDO MySQL
+- `apps/web/` → React + Vite
+- `apps/api/` → PHP native (router sederhana) + PDO MySQL
 
 ## Quick start
 
-### 1) Backend
+### 1) Backend API
 
 ```bash
-cd backend-php
+cd apps/api
 cp .env.example .env
 php -S 0.0.0.0:8080 -t public
 ```
 
-### 2) Frontend
+### 2) Frontend Web
 
 ```bash
-cd frontend-react
+cd apps/web
 npm install
 cp .env.example .env
 npm run dev
@@ -26,11 +26,13 @@ npm run dev
 
 Frontend akan call API backend di `VITE_API_BASE`.
 
-## Endpoint minimal
+## Endpoint utama
 
 - `GET /api/health`
+- `GET /api/menu`
 - `GET /api/dashboard?userId=1`
-
-## Catatan
-
-Implementasi ini adalah pondasi total rombak ke React + PHP native yang ringan dan cepat, agar iterasi berikutnya tinggal migrasi fitur per halaman.
+- `GET /api/devices?userId=1`
+- `GET /api/sensors?userId=1`
+- `GET /api/automation?userId=1`
+- `GET /api/settings?userId=1`
+- `GET /api/bootstrap?userId=1`

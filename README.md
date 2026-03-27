@@ -2,10 +2,10 @@
 
 Project ini sudah dimigrasikan menjadi **bukan Next.js lagi**.
 
-## Struktur
+## Struktur folder (rapi)
 
-- `frontend-react/` → React + Vite
-- `backend-php/` → PHP native (PDO + MySQL)
+- `apps/web/` → React + Vite (frontend)
+- `apps/api/` → PHP native + PDO (backend API)
 - `schema.sql` → skema database MySQL
 
 ## Jalankan cepat
@@ -19,15 +19,15 @@ Project ini sudah dimigrasikan menjadi **bukan Next.js lagi**.
 ### 2) API (PHP)
 
 ```bash
-cp backend-php/.env.example backend-php/.env
+cp apps/api/.env.example apps/api/.env
 npm run api:dev
 ```
 
 ### 3) Frontend (React)
 
 ```bash
-cp frontend-react/.env.example frontend-react/.env
-npm --prefix frontend-react install
+cp apps/web/.env.example apps/web/.env
+npm --prefix apps/web install
 npm run dev
 ```
 

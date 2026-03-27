@@ -22,4 +22,4 @@ php -S 0.0.0.0:8080 -t public
 
 ## Skema database
 
-Gunakan `../schema.sql` untuk membuat tabel yang dipakai endpoint di atas.
+Gunakan `../../schema.sql` untuk membuat tabel yang dipakai endpoint di atas.
