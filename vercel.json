@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm --prefix frontend-react install && npm --prefix frontend-react run build",
+  "outputDirectory": "frontend-react/dist",
+  "installCommand": "npm --prefix frontend-react install"
+}
