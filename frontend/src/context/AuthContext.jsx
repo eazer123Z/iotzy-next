@@ -3,16 +3,17 @@ import { apiCall } from '../lib/api'
 
 const AuthContext = createContext(null)
 
+const PUBLIC_PATHS = ['/login', '/register']
+
 export function AuthProvider({ children }) {
-  const [user, setUser]         = useState(null)
+  const [user, setUser] = useState(null)
   const [settings, setSettings] = useState(null)
-  const [loading, setLoading]   = useState(true)
+  const [loading, setLoading] = useState(true)
 
   const fetchUser = useCallback(async () => {
     const res = await apiCall('get_user')
     if (res?.success && res.user) {
       setUser(res.user)
-      // Simpan CSRF token dari server jika ada
       if (res.csrf_token) sessionStorage.setItem('csrf_token', res.csrf_token)
     } else {
       setUser(null)
@@ -25,6 +26,12 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
+    // Jangan fetch di halaman login/register karena belum ada session
+    const isPublic = PUBLIC_PATHS.includes(window.location.pathname)
+    if (isPublic) {
+      setLoading(false)
+      return
+    }
     Promise.all([fetchUser(), fetchSettings()]).finally(() => setLoading(false))
   }, [fetchUser, fetchSettings])
 
