@@ -8,7 +8,7 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
-// Inject CSRF token dari cookie/meta setiap request
+// Inject CSRF token dari sessionStorage (didapat setelah login)
 api.interceptors.request.use((config) => {
   const csrf = sessionStorage.getItem('csrf_token')
   if (csrf) config.headers['X-CSRF-Token'] = csrf
@@ -27,10 +27,6 @@ api.interceptors.response.use(
   }
 )
 
-/**
- * Wrapper utama — semua call pakai ini
- * apiCall('get_devices') atau apiCall('save_settings', { theme: 'dark' })
- */
 export async function apiCall(action, data = {}) {
   try {
     const res = await api.post(`?action=${action}`, data)

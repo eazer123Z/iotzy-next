@@ -15,7 +15,6 @@ if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
 }
 else {
-    // fallback: allow semua origin (bisa diketatkan nanti)
     header("Access-Control-Allow-Origin: *");
 }
 header('Access-Control-Allow-Credentials: true');
@@ -39,7 +38,6 @@ catch (Throwable $e) {
     die(json_encode(['success' => false, 'boot_error' => $e->getMessage()]));
 }
 
-// Native API Error Handler
 if (function_exists('registerApiErrorHandler')) {
     registerApiErrorHandler();
 }
@@ -70,7 +68,7 @@ if ($action === 'login' || $action === 'register') {
     exit;
 }
 
-// Logout via API
+// Logout
 if ($action === 'logout') {
     logoutUser();
     jsonOut(['success' => true]);
@@ -149,6 +147,5 @@ if ($action) {
     exit;
 }
 
-// ── Tidak ada action ───────────────────────────────────────────
 header('Content-Type: application/json');
 jsonOut(['success' => false, 'error' => 'No action specified. Use React frontend.'], 400);
