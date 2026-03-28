@@ -10,6 +10,25 @@ export function AuthProvider({ children }) {
   const [settings, setSettings] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // Fetch user + settings sekaligus dalam 1 roundtrip (hemat 1 API call)
+  const fetchSession = useCallback(async () => {
+    const [userRes, settingsRes] = await Promise.all([
+      apiCall('get_user'),
+      apiCall('get_settings'),
+    ])
+
+    if (userRes?.success && userRes.user) {
+      setUser(userRes.user)
+      if (userRes.csrf_token) sessionStorage.setItem('csrf_token', userRes.csrf_token)
+    } else {
+      setUser(null)
+    }
+
+    if (settingsRes?.success) {
+      setSettings(settingsRes.settings ?? settingsRes)
+    }
+  }, [])
+
   const fetchUser = useCallback(async () => {
     const res = await apiCall('get_user')
     if (res?.success && res.user) {
@@ -26,19 +45,20 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    // Jangan fetch di halaman login/register karena belum ada session
     const isPublic = PUBLIC_PATHS.includes(window.location.pathname)
     if (isPublic) {
       setLoading(false)
       return
     }
-    Promise.all([fetchUser(), fetchSettings()]).finally(() => setLoading(false))
-  }, [fetchUser, fetchSettings])
+    // Fetch keduanya paralel, set loading false setelah keduanya selesai
+    fetchSession().finally(() => setLoading(false))
+  }, [fetchSession])
 
   const login = async (username, password) => {
     const res = await apiCall('login', { username, password })
     if (res?.success) {
       if (res.csrf_token) sessionStorage.setItem('csrf_token', res.csrf_token)
+      // Fetch paralel setelah login
       await Promise.all([fetchUser(), fetchSettings()])
     }
     return res
@@ -51,7 +71,7 @@ export function AuthProvider({ children }) {
     setSettings(null)
   }
 
-  const refreshSettings = () => fetchSettings()
+  const refreshSettings = useCallback(() => fetchSettings(), [fetchSettings])
 
   return (
     <AuthContext.Provider value={{ user, settings, loading, login, logout, refreshSettings }}>

@@ -3,18 +3,22 @@
   "buildCommand": "npm --prefix frontend install && npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/*.php": {
-      "runtime": "vercel-php@0.7.4"
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.4",
+      "includeFiles": "**"
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/index.php"
+      "src": "/api/(.*)",
+      "dest": "/api/index.php"
     },
     {
-      "source": "/((?!api).*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
