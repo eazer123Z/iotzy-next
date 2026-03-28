@@ -1,0 +1,9 @@
+Python Sim/
+.git/
+.env
+*.log
+error_log
+frontend/node_modules/
+vendor/
+temp/
+tmp/

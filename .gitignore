@@ -1,39 +1,21 @@
-# Dependencies
-node_modules/
-
-# Environment
+# Credentials & Secrets
 .env
-.env.local
-.env*.local
-
-# Build
-.next/
-out/
-dist/
-
-# TypeScript
-*.tsbuildinfo
-
-# OS
 .DS_Store
 Thumbs.db
 
+# Dependencies
+vendor/
+node_modules/
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+frontend/.env.local
+
 # Logs
+error_log
 *.log
-npm-debug.log*
 
-# Vercel
-.vercel/
-
-# IDE
-.vscode/
-.idea/
-
-# Testing
-coverage/
-
-# Prisma
-prisma/*.db
-
-# SWC
-*.node
+# Temp
+temp/
+tmp/

@@ -1,0 +1,22 @@
+<?php
+
+$detectedUrl = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+$detectedUrl = preg_replace('/\/(api|controllers|core|pages|components|assets)$/', '', $detectedUrl);
+if ($detectedUrl === '/')
+    $detectedUrl = '';
+
+define('APP_NAME', getenv('APP_NAME') ?: 'IoTzy');
+define('APP_URL', getenv('APP_URL') ?: $detectedUrl);
+
+$isVercel = isset($_SERVER['VERCEL']) || getenv('VERCEL') === "1";
+define('ASSET_URL', APP_URL . '/assets');
+
+define('APP_VERSION',      '2.0.0');
+
+$appSecret = getenv('APP_SECRET') ?: 'dummy_secret_for_vercel_build';
+define('APP_SECRET', $appSecret);
+
+define('SESSION_LIFETIME', 86400);
+define('APP_TIMEZONE', getenv('TIMEZONE') ?: 'Asia/Jakarta');
+
+date_default_timezone_set(APP_TIMEZONE);
