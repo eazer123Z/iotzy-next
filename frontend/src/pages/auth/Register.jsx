@@ -3,10 +3,10 @@ import { useNavigate, Link } from 'react-router-dom'
 import { apiCall } from '../../lib/api'
 
 export default function Register() {
-  const [form, setForm]     = useState({ username: '', email: '', password: '', full_name: '' })
-  const [error, setError]   = useState('')
+  const [form, setForm] = useState({ username: '', email: '', password: '', full_name: '' })
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const navigate            = useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -15,7 +15,7 @@ export default function Register() {
     const res = await apiCall('register', form)
     setLoading(false)
     if (res?.success) navigate('/login')
-    else setError(res?.error || 'Gagal mendaftar')
+    else setError(typeof res?.error === 'string' ? res.error : 'Gagal mendaftar')
   }
 
   const f = (k) => (e) => setForm(p => ({ ...p, [k]: e.target.value }))

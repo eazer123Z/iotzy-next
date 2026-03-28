@@ -3,11 +3,11 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 export default function Login() {
-  const [form, setForm]     = useState({ username: '', password: '' })
-  const [error, setError]   = useState('')
+  const [form, setForm] = useState({ username: '', password: '' })
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login }           = useAuth()
-  const navigate            = useNavigate()
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -16,7 +16,7 @@ export default function Login() {
     const res = await login(form.username, form.password)
     setLoading(false)
     if (res?.success) navigate('/')
-    else setError(res?.error || 'Username atau password salah')
+    else setError(typeof res?.error === 'string' ? res.error : 'Username atau password salah')
   }
 
   return (
