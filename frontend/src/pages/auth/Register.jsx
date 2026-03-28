@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { apiCall } from '../../lib/api'
 
 export default function Register() {
-  const [form, setForm] = useState({ username: '', email: '', password: '', full_name: '' })
+  const [form, setForm] = useState({ username: '', email: '', password: '', fullname: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -33,7 +33,7 @@ export default function Register() {
           <div className="form-group">
             <label>Nama Lengkap</label>
             <input type="text" className="form-input" placeholder="Nama Lengkap"
-              value={form.full_name} onChange={f('full_name')} required />
+              value={form.fullname} onChange={f('fullname')} required />
           </div>
           <div className="form-group">
             <label>Username</label>
